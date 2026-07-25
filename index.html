@@ -15,25 +15,439 @@
 <body>
 
   <header>
-    <nav aria-label="Navigation principale">
-      <!-- Liens : Le mariage / Le programme / Venir au château / Logement / Liste de mariage / Contact -->
-      <!-- + bouton RSVP visuellement distinct (scroll vers #rsvp) -->
-      <!-- État actif géré en JS (IntersectionObserver). Menu burger < 640px. -->
+    <nav class="nav" aria-label="Navigation principale">
+      <a class="nav__brand" href="#mariage">J&nbsp;&amp;&nbsp;D</a>
+
+      <button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav__menu" id="nav-menu">
+        <li><a class="nav__link" href="#mariage">Le mariage</a></li>
+        <li><a class="nav__link" href="#programme">Le programme</a></li>
+        <li><a class="nav__link" href="#venir">Venir au château</a></li>
+        <li><a class="nav__link" href="#logement">Logement</a></li>
+        <li><a class="nav__link" href="#liste">Liste de mariage</a></li>
+        <li><a class="nav__link" href="#contact">Contact</a></li>
+        <li><a class="nav__link nav__cta btn" href="#rsvp">RSVP</a></li>
+      </ul>
     </nav>
   </header>
 
   <main>
-    <section id="mariage"><!-- HERO : aquarelle château + monogramme + noms + date/lieu + compte à rebours + CTA --></section>
-    <section id="programme" class="section"><!-- Timeline verticale responsive --></section>
-    <section id="venir" class="section"><!-- Adresse, 3 accès, iframe Maps (lazy), boutons location voiture --></section>
-    <section id="logement" class="section"><!-- Intro, infos pratiques, grille tarifaire (cards en mobile) --></section>
-    <section id="liste" class="section"><!-- Texte + bouton cagnotte (lien externe) --></section>
-    <section id="contact" class="section"><!-- Message + mailto --></section>
-    <section id="rsvp" class="section"><!-- Formulaire RSVP (Sheet Monkey + honeypot + confirmation) --></section>
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <section id="mariage" class="hero">
+      <!-- PLACEHOLDER: /assets/chateau.jpg (aquarelle HD sans texte) — image de fond pleine largeur -->
+      <div class="hero__media" aria-hidden="true"></div>
+
+      <!-- OPTION B (défaut) : texte dans le ciel + halo clair. Pour basculer en OPTION A (bande crème),
+           ajouter la classe `hero__panel--card` à l'élément ci-dessous. -->
+      <div class="hero__panel">
+        <!-- PLACEHOLDER: /assets/monogramme.png (PNG transparent) -->
+        <img class="hero__monogram" src="assets/monogramme.png" alt="" aria-hidden="true" width="120" height="120">
+
+        <p class="hero__eyebrow">Nous nous marions</p>
+        <h1 class="hero__names">Juliette &amp; Dimitri</h1>
+        <p class="hero__date">14 &amp; 15 Juillet 2027 · Château de Faverges, Haute-Savoie</p>
+
+        <p class="hero__countdown" id="countdown" aria-live="polite">J-<span id="countdown-days">…</span></p>
+
+        <a class="btn hero__cta" href="#rsvp">Confirmer ma présence →</a>
+      </div>
+    </section>
+
+    <!-- ═══════════ PROGRAMME ═══════════ -->
+    <section id="programme" class="section section--blue filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — trompette de la mort -->
+        <img class="section__motif" src="assets/champignon-trompette.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Deux jours ensemble</p>
+        <h2>Le programme</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline__line" aria-hidden="true"></div>
+
+        <h3 class="timeline__day">Mercredi 14 juillet</h3>
+        <ol class="timeline__list">
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — cérémonie -->
+              <img class="timeline__icon" src="assets/icone-ceremonie.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">15h00</p>
+              <p class="timeline__label">Cérémonie</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — photos -->
+              <img class="timeline__icon" src="assets/icone-photos.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">16h30</p>
+              <p class="timeline__label">Photos</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — vin d'honneur -->
+              <img class="timeline__icon" src="assets/icone-vin-honneur.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">17h30</p>
+              <p class="timeline__label">Vin d'honneur</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — dîner -->
+              <img class="timeline__icon" src="assets/icone-diner.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">20h30</p>
+              <p class="timeline__label">Dîner de réception</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — soirée -->
+              <img class="timeline__icon" src="assets/icone-soiree.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">22h00</p>
+              <p class="timeline__label">Soirée</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — gâteau -->
+              <img class="timeline__icon" src="assets/icone-gateau.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">00h00</p>
+              <p class="timeline__label">Découpe du gâteau</p>
+            </div>
+          </li>
+        </ol>
+
+        <h3 class="timeline__day">Jeudi 15 juillet</h3>
+        <ol class="timeline__list">
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — brunch -->
+              <img class="timeline__icon" src="assets/icone-brunch.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">10h00</p>
+              <p class="timeline__label">Brunch</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div class="timeline__card card">
+              <!-- PLACEHOLDER: icône aquarelle — checkout -->
+              <img class="timeline__icon" src="assets/icone-checkout.png" alt="" aria-hidden="true" width="40" height="40">
+              <p class="timeline__time">17h00</p>
+              <p class="timeline__label">Checkout</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═══════════ VENIR AU CHÂTEAU ═══════════ -->
+    <section id="venir" class="section section--green filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — cèpe -->
+        <img class="section__motif" src="assets/champignon-cepe.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Le chemin jusqu'à nous</p>
+        <h2>Venir au château</h2>
+      </div>
+
+      <address class="venir__address">
+        Château de Faverges — 293 Chemin de la vie laine, 74210 Faverges-Seythenex
+      </address>
+
+      <ul class="venir__modes">
+        <li class="venir__mode card">
+          <h3 class="venir__mode-title">En voiture</h3>
+          <p>GPS : « Château de Faverges, 74210 Faverges-Seythenex »</p>
+        </li>
+        <li class="venir__mode card">
+          <h3 class="venir__mode-title">En train</h3>
+          <p>Gare d'Annecy → 45 min en voiture</p>
+        </li>
+        <li class="venir__mode card">
+          <h3 class="venir__mode-title">En avion</h3>
+          <p>Aéroport de Genève → 1h en voiture</p>
+        </li>
+      </ul>
+
+      <div class="venir__map">
+        <iframe
+          title="Carte — Château de Faverges"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2784.266748064452!2d6.294987376736106!3d45.745798014605235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478bea8df1fcf95d%3A0x660591faef52731c!2sCh%C3%A2teau%20de%20Faverges!5e0!3m2!1sfr!2sfr!4v1785017302880!5m2!1sfr!2sfr"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <div class="venir__rental">
+        <h3 class="venir__rental-title">Louer une voiture</h3>
+        <div class="venir__rental-groups">
+          <div class="venir__rental-group">
+            <p class="venir__rental-from">Depuis Annecy</p>
+            <ul class="venir__rental-links">
+              <li><a class="btn btn--ghost" href="https://www.europcar.fr" target="_blank" rel="noopener">Europcar</a></li>
+              <li><a class="btn btn--ghost" href="https://www.hertz.fr" target="_blank" rel="noopener">Hertz</a></li>
+              <li><a class="btn btn--ghost" href="https://www.enterprise.fr" target="_blank" rel="noopener">Enterprise</a></li>
+            </ul>
+          </div>
+          <div class="venir__rental-group">
+            <p class="venir__rental-from">Depuis Genève</p>
+            <ul class="venir__rental-links">
+              <li><a class="btn btn--ghost" href="https://www.europcar.fr" target="_blank" rel="noopener">Europcar GVA</a></li>
+              <li><a class="btn btn--ghost" href="https://www.sixt.fr" target="_blank" rel="noopener">Sixt GVA</a></li>
+              <li><a class="btn btn--ghost" href="https://www.hertz.fr" target="_blank" rel="noopener">Hertz GVA</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ LOGEMENT ═══════════ -->
+    <section id="logement" class="section section--blue filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — girolle -->
+        <img class="section__motif" src="assets/champignon-girolle.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Dormir sur place</p>
+        <h2>Logement</h2>
+      </div>
+
+      <p class="logement__intro">
+        Le château et l'hôtel attenant disposent de chambres pour vous accueillir.
+        Indiquez votre besoin dans le formulaire RSVP — nous vous contacterons ensuite
+        personnellement avec le détail de votre chambre et les modalités de paiement.
+      </p>
+
+      <ul class="logement__infos">
+        <li>Linge de lit, linge de toilette et gel douche fournis par le château</li>
+        <li>3 lits parapluies disponibles sur demande (à indiquer dans le RSVP)</li>
+        <li>Pas d'ascenseur dans le domaine</li>
+        <li>Animaux interdits</li>
+        <li>Pas de service de nettoyage pendant le séjour</li>
+      </ul>
+
+      <p class="logement__note">Tarifs pour un séjour de 2 nuits inclus.</p>
+
+      <!-- Desktop : table. Sous 640px : bascule en cards empilées (mêmes données via data-label). -->
+      <table class="logement__table">
+        <caption class="sr-only">Grille tarifaire des hébergements</caption>
+        <thead>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Couchage</th>
+            <th scope="col">Prix/nuit</th>
+            <th scope="col">Prix 2 nuits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Type">Chambre confort</td>
+            <td data-label="Couchage">1 lit double</td>
+            <td data-label="Prix/nuit">90 €</td>
+            <td data-label="Prix 2 nuits">180 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Chambre confort</td>
+            <td data-label="Couchage">1 lit double + 1 lit simple</td>
+            <td data-label="Prix/nuit">105 €</td>
+            <td data-label="Prix 2 nuits">210 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Chambre confort</td>
+            <td data-label="Couchage">1 lit double + 2 lits</td>
+            <td data-label="Prix/nuit">125 €</td>
+            <td data-label="Prix 2 nuits">250 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Gîte</td>
+            <td data-label="Couchage">3 lits doubles (6 personnes)</td>
+            <td data-label="Prix/nuit">190 €</td>
+            <td data-label="Prix 2 nuits">380 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Dortoir</td>
+            <td data-label="Couchage">2 lits simples</td>
+            <td data-label="Prix/nuit">60 €</td>
+            <td data-label="Prix 2 nuits">120 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Dortoir</td>
+            <td data-label="Couchage">2 à 3 lits</td>
+            <td data-label="Prix/nuit">75 €</td>
+            <td data-label="Prix 2 nuits">150 €</td>
+          </tr>
+          <tr>
+            <td data-label="Type">Dortoir</td>
+            <td data-label="Couchage">4 lits</td>
+            <td data-label="Prix/nuit">100 €</td>
+            <td data-label="Prix 2 nuits">200 €</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══════════ LISTE DE MARIAGE ═══════════ -->
+    <section id="liste" class="section section--green filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — trompette de la mort -->
+        <img class="section__motif" src="assets/champignon-trompette.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Nous gâter</p>
+        <h2>Liste de mariage</h2>
+      </div>
+
+      <p class="liste__text">
+        Votre présence est notre plus beau cadeau. Si vous souhaitez nous gâter, voici notre liste.
+      </p>
+      <!-- PLACEHOLDER: URL de la cagnotte -->
+      <a class="btn liste__cta" href="#" target="_blank" rel="noopener">Accéder à la liste →</a>
+    </section>
+
+    <!-- ═══════════ CONTACT ═══════════ -->
+    <section id="contact" class="section section--blue filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — cèpe -->
+        <img class="section__motif" src="assets/champignon-cepe.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Une question ?</p>
+        <h2>Contact</h2>
+      </div>
+
+      <p class="contact__text">Pour toute question, contactez-nous directement.</p>
+      <!-- PLACEHOLDER: email des mariés -->
+      <a class="btn contact__cta" href="mailto:juliette.et.dimitri@example.com">Nous écrire</a>
+    </section>
+
+    <!-- ═══════════ RSVP ═══════════ -->
+    <section id="rsvp" class="section section--green filet">
+      <div class="section__head">
+        <!-- PLACEHOLDER: icône aquarelle — girolle -->
+        <img class="section__motif" src="assets/champignon-girolle.png" alt="" aria-hidden="true" width="56" height="56">
+        <p class="eyebrow">Répondez-nous</p>
+        <h2>Confirmer ma présence</h2>
+      </div>
+
+      <div class="rsvp">
+        <!-- PLACEHOLDER: endpoint Sheet Monkey — à renseigner dans l'attribut action ET dans scripts/main.js si besoin -->
+        <form class="rsvp__form" id="rsvp-form" action="https://api.sheetmonkey.io/form/jH5SmKjJ4xMqiLz8t2Ttwz" method="POST" novalidate>
+
+          <!-- Honeypot anti-spam : hors écran, non focusable, ignoré des lecteurs d'écran -->
+          <div class="rsvp__honeypot" aria-hidden="true">
+            <label for="rsvp-website">Ne pas remplir ce champ</label>
+            <input type="text" id="rsvp-website" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="rsvp__row">
+            <div class="rsvp__field">
+              <label for="rsvp-firstname">Prénom <span class="rsvp__req" aria-hidden="true">*</span></label>
+              <input type="text" id="rsvp-firstname" name="Prénom" autocomplete="given-name" required>
+            </div>
+            <div class="rsvp__field">
+              <label for="rsvp-lastname">Nom <span class="rsvp__req" aria-hidden="true">*</span></label>
+              <input type="text" id="rsvp-lastname" name="Nom" autocomplete="family-name" required>
+            </div>
+          </div>
+
+          <fieldset class="rsvp__field rsvp__fieldset">
+            <legend>Serez-vous présent(e) ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
+            <label class="rsvp__radio">
+              <input type="radio" name="Présence" value="Oui" required> Oui
+            </label>
+            <label class="rsvp__radio">
+              <input type="radio" name="Présence" value="Non" required> Non
+            </label>
+          </fieldset>
+
+          <!-- Bloc logistique : masqué si Présence = Non -->
+          <div class="rsvp__logistics" id="rsvp-logistics">
+
+            <div class="rsvp__row">
+              <div class="rsvp__field">
+                <label for="rsvp-adults">Nombre d'adultes (vous compris)</label>
+                <input type="number" id="rsvp-adults" name="Adultes" min="1" max="20" value="1" inputmode="numeric">
+              </div>
+              <div class="rsvp__field">
+                <label for="rsvp-children">Enfants (3 à 17 ans)</label>
+                <input type="number" id="rsvp-children" name="Enfants" min="0" max="20" value="0" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="rsvp__row">
+              <div class="rsvp__field">
+                <label for="rsvp-babies">Bébés (moins de 3 ans)</label>
+                <input type="number" id="rsvp-babies" name="Bébés" min="0" max="10" value="0" inputmode="numeric">
+              </div>
+              <div class="rsvp__field rsvp__cribs" id="rsvp-cribs-field" hidden>
+                <label for="rsvp-cribs">Lits parapluie souhaités</label>
+                <input type="number" id="rsvp-cribs" name="Lits parapluie" min="0" max="0" value="0" inputmode="numeric">
+                <p class="rsvp__hint">Seulement 3 lits parapluies disponibles — premier arrivé premier servi. Les mariés vous confirmeront la disponibilité.</p>
+              </div>
+            </div>
+
+            <fieldset class="rsvp__field rsvp__fieldset">
+              <legend>Jour d'arrivée</legend>
+              <label class="rsvp__radio">
+                <input type="radio" name="Arrivée" value="Veille"> Veille
+              </label>
+              <label class="rsvp__radio">
+                <input type="radio" name="Arrivée" value="Jour J"> Jour J
+              </label>
+            </fieldset>
+
+            <fieldset class="rsvp__field rsvp__fieldset">
+              <legend>Besoin de logement sur place ?</legend>
+              <label class="rsvp__radio">
+                <input type="radio" name="Logement" value="Oui"> Oui
+              </label>
+              <label class="rsvp__radio">
+                <input type="radio" name="Logement" value="Non"> Non
+              </label>
+            </fieldset>
+
+            <div class="rsvp__field">
+              <label for="rsvp-diet">Régimes / allergies</label>
+              <input type="text" id="rsvp-diet" name="Régimes / allergies">
+            </div>
+          </div>
+
+          <div class="rsvp__field">
+            <label for="rsvp-email">Email de contact <span class="rsvp__req" id="rsvp-email-req" aria-hidden="true">*</span></label>
+            <input type="email" id="rsvp-email" name="Email" autocomplete="email" required>
+          </div>
+
+          <div class="rsvp__field">
+            <label for="rsvp-message">Message pour les mariés</label>
+            <textarea id="rsvp-message" name="Message" rows="4"></textarea>
+          </div>
+
+          <p class="rsvp__error" id="rsvp-error" role="alert" hidden></p>
+
+          <button class="btn rsvp__submit" type="submit">Envoyer ma réponse</button>
+
+          <p class="rsvp__resubmit">Une erreur ? Resoumettez le formulaire, nous garderons votre dernière réponse.</p>
+          <p class="rsvp__rgpd">Ces informations servent uniquement à l'organisation du mariage et ne seront pas partagées.</p>
+        </form>
+
+        <!-- Écran de confirmation (affiché après envoi réussi) -->
+        <div class="rsvp__success" id="rsvp-success" hidden role="status">
+          <p class="rsvp__success-text">Merci <span id="rsvp-success-name">à vous</span>, ta réponse est bien enregistrée ✓</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer>
-    <!-- Juliette & Dimitri · 14-15 juillet 2027 -->
+  <footer class="footer">
+    <p class="footer__names">Juliette &amp; Dimitri</p>
+    <p class="footer__date">14-15 juillet 2027</p>
   </footer>
 
   <script src="scripts/main.js"></script>
