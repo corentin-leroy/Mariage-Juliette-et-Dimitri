@@ -1,0 +1,22 @@
+// ─── Direction artistique — tokens ───────────────────────────────
+// Palette
+$bg:         #FAFAFA; // fond général, jamais blanc pur
+$card:       #FAF5EC; // fond des cards et encadrés
+$green:      #5C7A3E; // titres de section, boutons, accents
+$green-dark: #2D4A1E; // H1, survols, éléments forts
+$sky:        #A8C8DC; // reflets ciel
+$ocre:       #C8A96E; // filets décoratifs, détails, pastilles timeline
+$stone:      #8C8A84; // texte secondaire, légendes
+$blue-pale:  #EAF3F8; // fond sections alternées
+$green-pale: #EFF5EA; // fond sections alternées
+$ink:        #1A1A1A; // corps de texte
+
+// Typographies (chargées via Google Fonts dans index.html)
+$font-display: 'Cormorant Garamond', serif; // prénoms, titres poétiques, jours du programme
+$font-title:   'Playfair Display', serif;   // titres de section
+$font-body:    'Lato', sans-serif;           // paragraphes, labels, formulaire
+
+// Layout
+$breakpoint-mobile: 640px;
+$section-pad-desktop: 80px;
+$section-pad-mobile:  56px;

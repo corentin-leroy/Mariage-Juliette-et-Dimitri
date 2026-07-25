@@ -1,0 +1,14 @@
+{
+  "name": "site-mariage-jd",
+  "version": "0.1.0",
+  "description": "Site one-page du mariage de Juliette & Dimitri (14-15 juillet 2027)",
+  "private": true,
+  "scripts": {
+    "css": "sass styles/main.scss styles/main.css --no-source-map",
+    "watch": "sass --watch styles/main.scss styles/main.css",
+    "build": "sass styles/main.scss styles/main.css --style compressed --no-source-map"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}

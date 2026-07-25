@@ -1,0 +1,51 @@
+@use 'variables' as *;
+
+// ─── Reset léger ──────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+// ─── Base ─────────────────────────────────────────────────────────
+html { scroll-behavior: smooth; }
+
+body {
+  background: $bg;
+  color: $ink;
+  font-family: $font-body;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 { font-family: $font-title; font-weight: 600; color: $green-dark; }
+
+a { color: $green; }
+
+// Bouton de base (DA)
+.btn {
+  display: inline-block;
+  background: $green;
+  color: #fff;
+  font-family: $font-body;
+  padding: 12px 24px;
+  border-radius: 3px;
+  text-decoration: none;
+  transition: background .2s;
+  &:hover { background: $green-dark; }
+}
+
+// Filet décoratif ocre (à appliquer en haut/bas des sections colorées)
+.filet { border-top: 1px solid $ocre; border-bottom: 1px solid $ocre; }
+
+// Base de section
+.section {
+  padding: $section-pad-desktop 24px;
+  @media (max-width: $breakpoint-mobile) { padding: $section-pad-mobile 18px; }
+}
+
+// Respect du reduced-motion
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+// ─── Sections (à compléter par Claude Code) ───────────────────────
+// #mariage (hero) · #programme · #venir · #logement · #liste · #contact · #rsvp
