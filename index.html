@@ -56,7 +56,31 @@
         <h1 class="hero__names">Juliette &amp; Dimitri</h1>
         <p class="hero__date">14 &amp; 15 Juillet 2027 · Château de Faverges, Haute-Savoie</p>
 
-        <p class="hero__countdown" id="countdown" aria-live="polite">J-<span id="countdown-days">…</span></p>
+        <!-- Compte à rebours temps réel. La liste est aria-hidden : un aria-live qui change
+             chaque seconde noierait les lecteurs d'écran. Le résumé sr-only ci-dessous prend
+             le relais et n'est réannoncé qu'au changement de jour. -->
+        <div class="hero__countdown" id="countdown">
+          <ul class="countdown" id="countdown-units" aria-hidden="true">
+            <li class="countdown__unit countdown__unit--days">
+              <span class="countdown__value" id="cd-days">…</span>
+              <span class="countdown__label">jours</span>
+            </li>
+            <li class="countdown__unit countdown__unit--hours">
+              <span class="countdown__value" id="cd-hours">…</span>
+              <span class="countdown__label">heures</span>
+            </li>
+            <li class="countdown__unit countdown__unit--minutes">
+              <span class="countdown__value" id="cd-minutes">…</span>
+              <span class="countdown__label">min</span>
+            </li>
+            <li class="countdown__unit countdown__unit--seconds">
+              <span class="countdown__value" id="cd-seconds">…</span>
+              <span class="countdown__label">sec</span>
+            </li>
+          </ul>
+          <p class="countdown__final" id="countdown-final" hidden>Le grand jour est arrivé !</p>
+          <p class="sr-only" id="countdown-sr" aria-live="polite"></p>
+        </div>
 
         <a class="btn hero__cta" href="#rsvp">Confirmer ma présence →</a>
       </div>

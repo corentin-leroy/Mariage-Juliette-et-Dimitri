@@ -1,6 +1,6 @@
 // Site mariage Juliette & Dimitri — JS vanilla
-// 1. Compte à rebours J-XXX jusqu'au 14 juillet 2027 (hero).
-// 2. Nav : lien actif via IntersectionObserver + menu burger < 640px.
+// 1. Compte à rebours temps réel (jours/heures/minutes/secondes) jusqu'au 14 juillet 2027 (hero).
+// 2. Nav : lien actif via IntersectionObserver + menu burger < 980px ($breakpoint-nav).
 // 3. Formulaire RSVP : logique conditionnelle, honeypot, validation, envoi fetch, confirmation, erreurs.
 // Le scroll doux vers #rsvp est natif (ancres + scroll-behavior CSS).
 
@@ -12,16 +12,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ─── 1. Compte à rebours ──────────────────────────────────────────
 function initCountdown() {
-  const target = document.getElementById('countdown-days');
-  if (!target) return;
+  const root = document.getElementById('countdown');
+  if (!root) return;
 
-  const wedding = new Date(2027, 6, 14); // 14 juillet 2027 (mois 0-indexé)
-  const today = new Date();
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const msPerDay = 24 * 60 * 60 * 1000;
-  const days = Math.max(0, Math.round((wedding - startOfToday) / msPerDay));
+  const units = document.getElementById('countdown-units');
+  const finalMsg = document.getElementById('countdown-final');
+  const srSummary = document.getElementById('countdown-sr');
+  const out = {
+    days: document.getElementById('cd-days'),
+    hours: document.getElementById('cd-hours'),
+    minutes: document.getElementById('cd-minutes'),
+    seconds: document.getElementById('cd-seconds'),
+  };
+  if (!units || !out.days || !out.hours || !out.minutes || !out.seconds) return;
 
-  target.textContent = days;
+  const wedding = new Date(2027, 6, 14); // 14 juillet 2027, 00:00 heure locale (mois 0-indexé)
+  const pad = (n) => String(n).padStart(2, '0');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  let timer = null;
+  const stop = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
+
+  // Date atteinte : on coupe l'intervalle et on bascule sur le message final,
+  // plutôt que d'afficher des zéros ou des valeurs négatives.
+  const showFinal = () => {
+    stop();
+    units.hidden = true;
+    if (finalMsg) finalMsg.hidden = false;
+    if (srSummary) srSummary.textContent = 'Le grand jour est arrivé !';
+  };
+
+  let lastDays = null;
+  const render = () => {
+    const diff = wedding.getTime() - Date.now();
+    if (diff <= 0) { showFinal(); return; }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    out.days.textContent = String(days);
+    out.hours.textContent = pad(hours);
+    out.minutes.textContent = pad(minutes);
+    out.seconds.textContent = pad(seconds);
+
+    // Résumé vocal au jour près : évite une annonce par seconde
+    if (srSummary && days !== lastDays) {
+      lastDays = days;
+      srSummary.textContent = 'Plus que ' + days + (days > 1 ? ' jours' : ' jour') + ' avant le mariage.';
+    }
+  };
+
+  // prefers-reduced-motion : aucun défilement, on fige l'affichage sur jours + heures
+  const apply = () => {
+    stop();
+    root.classList.toggle('hero__countdown--static', reduceMotion.matches);
+    render();
+    if (!reduceMotion.matches && !units.hidden) timer = setInterval(render, 1000);
+  };
+
+  apply();
+  reduceMotion.addEventListener?.('change', apply);
 }
 
 // ─── 2. Navigation : burger + lien actif ──────────────────────────

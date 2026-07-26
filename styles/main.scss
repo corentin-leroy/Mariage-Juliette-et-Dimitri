@@ -342,12 +342,53 @@ section[id] { scroll-margin-top: $nav-height; }
   color: $ink;
   margin-bottom: 18px;
 }
-.hero__countdown {
+// Compte à rebours : 4 unités en ligne, le nombre au-dessus de son libellé.
+// La classe .hero__countdown est conservée : c'est le point d'accroche du text-shadow du hero.
+.hero__countdown { margin-bottom: 24px; }
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(12px, 4vw, 30px);
+  list-style: none;
+}
+.countdown__unit { display: flex; flex-direction: column; align-items: center; }
+.countdown__value {
   font-family: $font-display;
   font-style: italic;
-  font-size: 1.6rem;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.1;
   color: $green-dark;
-  margin-bottom: 24px;
+  // Double garantie anti-tremblement : chiffres à chasse fixe si la police les fournit,
+  // et largeur réservée par case pour que la ligne ne bouge pas même sans tabular-nums.
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  min-width: 2.2ch;
+  text-align: center;
+}
+.countdown__unit--days .countdown__value { min-width: 3.5ch; } // jusqu'à 3 chiffres
+.countdown__label {
+  font-family: $font-body;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: clamp(.58rem, 1.9vw, .72rem);
+  color: $stone;
+  margin-top: 6px;
+}
+.countdown__final {
+  font-family: $font-display;
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  color: $green-dark;
+}
+// prefers-reduced-motion : le JS ne fait plus défiler, on masque minutes et secondes
+.hero__countdown--static {
+  .countdown__unit--minutes,
+  .countdown__unit--seconds { display: none; }
 }
 .hero__cta { font-size: 1rem; }
 
