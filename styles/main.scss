@@ -167,7 +167,7 @@ section[id] { scroll-margin-top: $nav-height; }
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 8px 24px 20px;
+    padding: 10px 24px 23px;                   // +15% d'air haut/bas, cohérent avec les items
     background: rgba(250, 250, 250, .98);
     border-bottom: 1px solid $ocre;
     transform: translateY(-8px);
@@ -176,8 +176,35 @@ section[id] { scroll-margin-top: $nav-height; }
     transition: opacity .2s, transform .2s, visibility .2s;
   }
   .nav__menu.is-open { transform: translateY(0); opacity: 1; visibility: visible; }
-  .nav__link { padding: 12px 0; border-bottom: 1px solid rgba(200,169,110,.25); }
-  .nav__cta { margin-top: 12px; text-align: center; border-bottom: none; }
+
+  // Les liens passent en block : sans ça le padding vertical est inerte (élément inline)
+  // et les bordures se dessinent à la largeur du texte au lieu de la ligne entière.
+  .nav__link {
+    display: block;
+    padding: 14px 0 14px 13px;                // 12 → 14px : +15% d'air vertical (~49px de tap)
+    border-bottom: 1px solid rgba($ocre, .25); // filet séparateur discret
+    border-left: 3px solid transparent;        // gouttière réservée : le texte ne saute pas à l'activation
+    transition: color .2s, border-color .2s, background-color .2s;
+  }
+
+  // Actif en mobile : accent ocre à gauche, plus de soulignement. On réaffirme la couleur
+  // du filet bas, sinon la règle desktop .nav__link.is-active le repeint en ocre plein.
+  .nav__link.is-active {
+    border-bottom-color: rgba($ocre, .25);
+    border-left-color: $ocre;
+    background: rgba($ocre, .12);
+  }
+
+  // Le CTA RSVP reste un bouton : ni accent gauche, ni filet séparateur, même à l'état actif.
+  .nav__cta,
+  .nav__cta.is-active {
+    margin-top: 16px;
+    padding: 12px 24px;
+    text-align: center;
+    background: $green;
+    border: none;
+    &:hover { background: $green-dark; }
+  }
 }
 
 // ─── En-tête de section réutilisable ──────────────────────────────
