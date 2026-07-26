@@ -1,4 +1,5 @@
 @use 'variables' as *;
+@use 'sass:color';
 
 // ─── Reset léger ──────────────────────────────────────────────────
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,7 +15,7 @@ body {
   color: $ink;
   font-family: $font-body;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -189,13 +190,33 @@ section[id] { scroll-margin-top: $nav-height; }
   margin: 0 auto 40px;
   text-align: center;
 }
+// Motif nu du champignon, uniforme sur toutes les sections (format du trompette #programme)
 .section__motif {
   display: block;
   width: 56px; height: auto;
   margin: 0 auto 12px;
   opacity: .9;
 }
-.section__head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+
+.section__head h2 { font-size: clamp(2rem, 4.5vw, 2.8rem); }
+
+// Filet à fleuron : deux traits ocre encadrant un champignon miniature (SVG data-URI)
+.section__sep {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: 340px;
+  max-width: 80%;
+  margin: 18px auto 0;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='%23C8A96E'%3E%3Cpath%20d='M12%204c-4.4%200-8%202.7-8%206%200%20.6.5%201%201.1%201h13.8c.6%200%201.1-.4%201.1-1%200-3.3-3.6-6-8-6z'/%3E%3Cpath%20d='M9.5%2011h5v6.2c0%201-.9%201.8-2%201.8h-1c-1.1%200-2-.8-2-1.8V11z'/%3E%3C/svg%3E") center / 22px 22px no-repeat;
+}
+.section__sep::before,
+.section__sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: $ocre;
+}
 
 .eyebrow {
   font-family: $font-body;
@@ -215,25 +236,35 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 
 // ─── HERO (#mariage) ──────────────────────────────────────────────
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: calc(#{$nav-height} + 40px) 20px 60px;   // bloc gardé haut, dans le ciel
+// L'image donne sa hauteur au hero et s'affiche EN ENTIER (aucun ratio codé en dur)
+// border-bottom : cumulé au border-top de #programme, le trait de jonction fait 2px comme ailleurs
+.hero { position: relative; border-bottom: 1px solid $ocre; }
+
+.hero__media { position: relative; display: block; }
+.hero__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: $sky; // teinte de repli le temps du chargement
 }
-.hero__media {
+// Fondu du bas de l'image vers la section suivante (#programme = $blue-pale)
+.hero__fade {
   position: absolute;
-  inset: 0;
-  background: $sky url('../assets/chateau.jpg') center top / cover no-repeat;
-  z-index: 0;
+  left: 0; right: 0; bottom: 0;
+  height: clamp(50px, 10vw, 150px);
+  background: linear-gradient(to bottom, rgba($blue-pale, 0), $blue-pale);
+  pointer-events: none;
 }
+
+// Desktop : bloc texte superposé, centré et haut, dans le ciel de l'image
 .hero__panel {
-  position: relative;
+  position: absolute;
+  top: max(#{$nav-height} + 12px, 7%);   // proportionnel au ratio de l'image, jamais sous la nav
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
-  max-width: 640px;
+  width: min(640px, 90%);
   text-align: center;
-  align-self: flex-start;
 
   // OPTION B (défaut) : halo clair, sans bande. Lisibilité assurée par text-shadow blanc doux.
   .hero__eyebrow,
@@ -291,94 +322,31 @@ section[id] { scroll-margin-top: $nav-height; }
 .hero__cta { font-size: 1rem; }
 
 @media (max-width: $breakpoint-mobile) {
-  .hero { min-height: 90vh; padding-top: calc(#{$nav-height} + 24px); }
+  // Image en bandeau, puis bloc texte EN DESSOUS (plus de superposition)
+  .hero__panel {
+    position: static;
+    transform: none;
+    width: auto;
+    background: $green-pale;
+    padding: 32px 20px 40px;
+
+    // Fond clair : on retire le halo
+    .hero__eyebrow,
+    .hero__names,
+    .hero__date,
+    .hero__countdown { text-shadow: none; }
+  }
+  // Le bas de l'image se fond vers le fond du bloc texte
+  .hero__fade { background: linear-gradient(to bottom, rgba($green-pale, 0), $green-pale); }
 }
 
-// ─── PROGRAMME (#programme) — timeline ────────────────────────────
-.timeline {
-  position: relative;
+// ─── PROGRAMME (#programme) — image ───────────────────────────────
+.programme-image {
+  display: block;
+  width: 100%;
   max-width: $content-max;
   margin: 0 auto;
-}
-.timeline__line {
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
-  width: 2px;
-  margin-left: -1px;
-  background: $ocre;
-}
-.timeline__day {
-  position: relative;
-  z-index: 1;
-  font-family: $font-display;
-  font-style: italic;
-  font-weight: 600;
-  color: $green-dark;
-  font-size: 1.7rem;
-  text-align: center;
-  margin: 8px 0 24px;
-  span, & { background: transparent; }
-}
-// Pastille crème derrière l'en-tête de jour pour couper la ligne
-.timeline__day::after {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 50%;
-  transform: translateX(-50%);
-  width: 260px;
-  max-width: 90%;
-  background: $blue-pale;
-  z-index: -1;
-}
-.timeline__list { list-style: none; }
-.timeline__item {
-  position: relative;
-  width: 50%;
-  padding: 12px 40px;
-  margin-bottom: 8px;
-}
-// Alternance gauche / droite (desktop)
-.timeline__item:nth-child(odd)  { left: 0; text-align: right; }
-.timeline__item:nth-child(even) { left: 50%; text-align: left; }
-
-.timeline__dot {
-  position: absolute;
-  top: 26px;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: $ocre;
-  border: 2px solid $blue-pale;
-}
-.timeline__item:nth-child(odd)  .timeline__dot { right: -7px; }
-.timeline__item:nth-child(even) .timeline__dot { left: -7px; }
-
-.timeline__card { display: inline-block; text-align: left; min-width: 180px; }
-.timeline__icon { display: block; width: 40px; height: auto; margin-bottom: 8px; }
-.timeline__time {
-  font-family: $font-body;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: $green;
-  font-size: .85rem;
-}
-.timeline__label { font-family: $font-display; font-style: italic; font-size: 1.25rem; color: $ink; }
-
-@media (max-width: $breakpoint-mobile) {
-  .timeline__line { left: 8px; }
-  .timeline__day { text-align: left; padding-left: 32px; font-size: 1.4rem; }
-  .timeline__day::after { display: none; }
-  .timeline__item,
-  .timeline__item:nth-child(odd),
-  .timeline__item:nth-child(even) {
-    width: 100%;
-    left: 0;
-    text-align: left;
-    padding: 8px 0 8px 32px;
-  }
-  .timeline__item:nth-child(odd) .timeline__dot,
-  .timeline__item:nth-child(even) .timeline__dot { left: 2px; right: auto; }
-  .timeline__card { display: block; }
+  border-radius: 5px;
 }
 
 // ─── VENIR (#venir) ───────────────────────────────────────────────
@@ -397,9 +365,50 @@ section[id] { scroll-margin-top: $nav-height; }
   margin: 0 auto 40px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 22px;
 }
-.venir__mode-title { font-size: 1.2rem; margin-bottom: 6px; }
+
+// Card de mode : crème plus clair que $card + filet ocre pour se détacher du vert pâle
+.venir__mode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: color.mix(#fff, $card, 50%);
+  border: 1px solid rgba($ocre, .55);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+// Cadre d'icône : reprend le motif « spécimen » des en-têtes (double filet ocre)
+.venir__mode-icon {
+  width: 52px;
+  height: 52px;
+  padding: 6px;
+  margin-bottom: 16px;
+  background: $card;
+  border: 1px solid $ocre;
+  border-radius: 10px;
+}
+.venir__mode-icon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba($ocre, .5);
+  border-radius: 6px;
+}
+.venir__mode-icon svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+  color: $green; // stroke via currentColor
+}
+
+.venir__mode-title { font-size: 1.3rem; margin-bottom: 8px; }
+.venir__mode-text { color: $ink; }
+.venir__mode-time { color: $green; font-weight: 700; }
+.venir__mode-gps { font-family: $font-display; font-style: italic; color: $stone; }
 .venir__map {
   max-width: $content-max;
   margin: 0 auto 40px;
@@ -440,12 +449,12 @@ section[id] { scroll-margin-top: $nav-height; }
 
 // ─── LOGEMENT (#logement) ─────────────────────────────────────────
 .logement__intro,
-.logement__note { max-width: $content-max; margin: 0 auto 20px; text-align: center; }
+.logement__note { max-width: 680px; margin: 0 auto 20px; text-align: center; }
 .logement__note { font-family: $font-display; font-style: italic; color: $stone; }
 .logement__infos {
-  max-width: $content-max;
+  max-width: 680px;           // même colonne centrale que .logement__intro
   margin: 0 auto 36px;
-  padding-left: 22px;
+  padding-left: 22px;         // les puces et le texte restent alignés à gauche dans le conteneur
   li { margin-bottom: 6px; }
 }
 .logement__table {
@@ -454,24 +463,56 @@ section[id] { scroll-margin-top: $nav-height; }
   width: 100%;
   border-collapse: collapse;
   background: $card;
-  border-radius: 5px;
+  border: 1.5px solid $ocre;                      // cadre franc, pleine opacité
+  border-radius: 10px;
   overflow: hidden;
-  th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(200,169,110,.35); }
+  box-shadow: 0 2px 12px rgba($green-dark, .06);  // ombre aquarelle très douce
+
+
+  th, td { padding: 13px 18px; text-align: left; vertical-align: baseline; }
+
+  // En-têtes de colonnes
   thead th {
     font-family: $font-body;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     font-size: .72rem;
     color: $green-dark;
-    background: rgba(200,169,110,.15);
+    background: rgba($ocre, .15);
+    border-bottom: 1px solid rgba($ocre, .45);
   }
-  tbody tr:last-child td { border-bottom: none; }
+  .num { text-align: right; }
+
+  // Lignes de données : séparateur léger + zébrage discret
+  tbody td { border-bottom: 1px solid rgba($ocre, .18); }
+  tbody tr:not(.logement__group):nth-of-type(even) td { background: rgba($ocre, .07); }
+  tbody:last-of-type tr:last-child td { border-bottom: none; }
 }
 
-// Sous 640px : la table devient des cards empilées (une par ligne/type)
+// Intitulé de groupe (Chambres confort / Gîte / Dortoirs)
+.logement__group-th {
+  font-family: $font-body;
+  font-weight: 700;
+  letter-spacing: .5px;
+  font-size: .9rem;
+  color: $green;
+  background: rgba($ocre, .08);
+  border-top: 1px solid rgba($ocre, .30);
+  border-bottom: 1px solid rgba($ocre, .30);
+}
+.logement__table tbody:first-of-type .logement__group-th { border-top: none; }
+.logement__orn { color: $ocre; margin-right: 8px; }
+
+// Couchage à gauche, prix à droite avec hiérarchie
+// (qualifiés par .logement__table pour l'emporter sur `.logement__table td { text-align: left }`)
+.logement__table .logement__cell--sleep { color: $ink; }
+.logement__table .logement__price--night { text-align: right; color: $stone; font-size: .85rem; white-space: nowrap; }
+.logement__table .logement__price--total { text-align: right; color: $green-dark; font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
+
+// Sous 640px : la table devient des cards empilées, groupées par catégorie
 @media (max-width: $breakpoint-mobile) {
-  .logement__table { background: transparent; }
+  .logement__table { background: transparent; border: none; box-shadow: none; }
   .logement__table thead {
     position: absolute;
     width: 1px; height: 1px;
@@ -481,25 +522,40 @@ section[id] { scroll-margin-top: $nav-height; }
     white-space: nowrap;
     border: 0;
   }
-  .logement__table tr {
+
+  // Intitulé de catégorie : label au-dessus des cards, pas une card
+  .logement__table tr.logement__group { display: block; margin: 0; }
+  .logement__table .logement__group-th {
+    display: block;
+    background: transparent;
+    border: none;
+    padding: 10px 4px 6px;
+    text-align: left;
+  }
+
+  // Chaque ligne de données devient une card
+  .logement__table tbody tr:not(.logement__group) {
     display: block;
     background: $card;
-    border-radius: 5px;
-    padding: 8px 16px;
+    border: 1px solid rgba($ocre, .45);
+    border-radius: 8px;
+    padding: 6px 16px;
     margin-bottom: 14px;
   }
-  .logement__table td {
+  .logement__table tbody td {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: 16px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(200,169,110,.25);
+    padding: 9px 0;
+    border-bottom: 1px solid rgba($ocre, .18);
   }
   .logement__table tr td:last-child { border-bottom: none; }
   .logement__table td::before {
     content: attr(data-label);
     font-weight: 700;
     color: $green-dark;
+    text-align: left;
   }
 }
 
