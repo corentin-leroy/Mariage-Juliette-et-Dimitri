@@ -31,7 +31,7 @@
         <li><a class="nav__link" href="#logement">Logement</a></li>
         <li><a class="nav__link" href="#liste">Liste de mariage</a></li>
         <li><a class="nav__link" href="#contact">Contact</a></li>
-        <li><a class="nav__link nav__cta btn" href="#rsvp">RSVP</a></li>
+        <li><a class="nav__link nav__cta btn" href="#rsvp">Confirmer ma présence</a></li>
       </ul>
     </nav>
   </header>
@@ -344,7 +344,8 @@
 
             <div class="rsvp__row">
               <div class="rsvp__field">
-                <label for="rsvp-adults">Nombre d'adultes (vous compris)</label>
+                <label for="rsvp-adults">Nombre d'adultes (vous compris) <span class="rsvp__req" aria-hidden="true">*</span></label>
+                <!-- Pas de required en dur : posé/retiré par le JS selon la branche Oui/Non -->
                 <input type="number" id="rsvp-adults" name="Adultes" min="1" max="20" value="1" inputmode="numeric">
               </div>
               <div class="rsvp__field">
@@ -366,7 +367,7 @@
             </div>
 
             <fieldset class="rsvp__field rsvp__fieldset">
-              <legend>Jour d'arrivée</legend>
+              <legend>Jour d'arrivée <span class="rsvp__req" aria-hidden="true">*</span></legend>
               <label class="rsvp__radio">
                 <input type="radio" name="Arrivée" value="Veille"> Veille
               </label>
@@ -376,7 +377,7 @@
             </fieldset>
 
             <fieldset class="rsvp__field rsvp__fieldset">
-              <legend>Besoin de logement sur place ?</legend>
+              <legend>Besoin de logement sur place ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
               <label class="rsvp__radio">
                 <input type="radio" name="Logement" value="Oui"> Oui
               </label>

@@ -132,6 +132,7 @@ section[id] { scroll-margin-top: $nav-height; }
 .nav__cta {
   color: #fff;
   padding: 8px 18px;
+  white-space: nowrap;              // le libellé du CTA ne se coupe jamais en deux
   &:hover { color: #fff; }
   &.is-active { border-bottom-color: transparent; }
 }
@@ -159,7 +160,9 @@ section[id] { scroll-margin-top: $nav-height; }
   .nav__burger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 }
 
-@media (max-width: $breakpoint-mobile) {
+// Bascule en menu burger dès $breakpoint-nav (960px) et non $breakpoint-mobile :
+// en dessous, la nav horizontale ne peut pas tenir sur une seule ligne.
+@media (max-width: $breakpoint-nav) {
   .nav__burger { display: flex; }
   .nav__menu {
     position: fixed;

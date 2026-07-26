@@ -160,6 +160,7 @@ section[id] {
 .nav__cta {
   color: #fff;
   padding: 8px 18px;
+  white-space: nowrap;
 }
 .nav__cta:hover {
   color: #fff;
@@ -198,7 +199,7 @@ section[id] {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 980px) {
   .nav__burger {
     display: flex;
   }

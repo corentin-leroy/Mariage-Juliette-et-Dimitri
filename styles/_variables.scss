@@ -18,6 +18,9 @@ $font-body:    'Lato', sans-serif;           // paragraphes, labels, formulaire
 
 // Layout
 $breakpoint-mobile: 640px;
+// Seuil propre à la nav : 6 liens + le CTA ne tiennent plus sur une ligne en dessous,
+// le menu burger prend donc le relais bien avant $breakpoint-mobile.
+$breakpoint-nav: 980px;   // mesuré : la nav horizontale casse dès 961px, marge pour la police de repli
 $section-pad-desktop: 104px;
 $section-pad-mobile:  56px;
 $nav-height: 64px;          // hauteur de la nav fixe (= scroll-margin-top des sections)

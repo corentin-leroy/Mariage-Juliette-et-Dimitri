@@ -94,6 +94,22 @@ function initRsvp() {
   const honeypot = form.querySelector('[name="_gotcha"]');
   const submitBtn = form.querySelector('.rsvp__submit');
 
+  // Champs logistiques obligatoires — uniquement sur la branche « Oui ».
+  // Aucun required n'est écrit en dur dans le HTML pour ces champs : il est posé
+  // et retiré ici, sinon un envoi « Non » serait bloqué par des champs invisibles.
+  const adults = document.getElementById('rsvp-adults');
+  const arrivalRadios = Array.from(form.querySelectorAll('[name="Arrivée"]'));
+  const lodgingRadios = Array.from(form.querySelectorAll('[name="Logement"]'));
+  const requiredLogistics = [adults, ...arrivalRadios, ...lodgingRadios].filter(Boolean);
+  // Filet de sécurité : tout champ du bloc logistique, y compris ceux ajoutés plus tard
+  const allLogisticsFields = Array.from(logistics.querySelectorAll('input, select, textarea'));
+
+  const applyLogisticsRequired = (required) => {
+    // On repart toujours de zéro : garantit qu'aucun champ masqué ne reste required
+    allLogisticsFields.forEach((el) => { el.required = false; });
+    if (required) requiredLogistics.forEach((el) => { el.required = true; });
+  };
+
   // Présence Oui/Non → affichage logistique + email requis
   const presenceRadios = form.querySelectorAll('[name="Présence"]');
   const applyPresence = () => {
@@ -106,6 +122,9 @@ function initRsvp() {
     // Email requis seulement si présent ; optionnel si absent
     emailInput.required = !declining;
     if (emailReq) emailReq.style.display = declining ? 'none' : '';
+    // Même convention que l'email : obligatoire tant que l'invité n'a pas répondu « Non ».
+    // Les astérisques du bloc logistique disparaissent avec lui (parent [hidden]).
+    applyLogisticsRequired(!declining);
   };
   presenceRadios.forEach((r) => r.addEventListener('change', applyPresence));
 
@@ -143,6 +162,23 @@ function initRsvp() {
     if (!firstname) return 'Merci d’indiquer votre prénom.';
     if (!lastname) return 'Merci d’indiquer votre nom.';
     if (!presence) return 'Merci d’indiquer si vous serez présent(e).';
+
+    // Logistique : contrôlée seulement sur la branche « Oui ». Sur « Non » ces champs
+    // sont masqués, on ne les regarde pas — un refus ne doit jamais être bloqué.
+    // Le formulaire est en novalidate : c'est bien ici que l'obligation est appliquée.
+    if (presence === 'Oui') {
+      const rawAdults = adults.value.trim();
+      if (!rawAdults) return 'Merci d’indiquer le nombre d’adultes (au moins 1).';
+      const nbAdults = Number(rawAdults);
+      if (!Number.isInteger(nbAdults) || nbAdults < 1) {
+        return 'Le nombre d’adultes doit être un nombre entier, au minimum 1.';
+      }
+
+      if (!arrivalRadios.some((r) => r.checked)) return 'Merci d’indiquer votre jour d’arrivée.';
+      if (!lodgingRadios.some((r) => r.checked)) {
+        return 'Merci d’indiquer si vous avez besoin d’un logement sur place.';
+      }
+    }
 
     if (emailInput.required) {
       const email = emailInput.value.trim();
