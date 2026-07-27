@@ -16,7 +16,11 @@
 
   <header>
     <nav class="nav" aria-label="Navigation principale">
-      <a class="nav__brand" href="#mariage">J&nbsp;&amp;&nbsp;D</a>
+      <!-- Le monogramme est peint en CSS (mask-image) pour reprendre le vert de la nav :
+           d'où un span décoratif plutôt qu'une <img>, le nom accessible passe par aria-label. -->
+      <a class="nav__brand" href="#mariage" aria-label="Juliette &amp; Dimitri">
+        <span class="nav__brand-mark" aria-hidden="true"></span>
+      </a>
 
       <button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
         <span class="nav__burger-bar" aria-hidden="true"></span>
@@ -49,8 +53,8 @@
       <!-- OPTION B (défaut) : desktop = texte dans le ciel + halo clair ; mobile = bloc sous l'image.
            Pour forcer la bande crème (OPTION A) sur desktop, ajouter `hero__panel--card` ci-dessous. -->
       <div class="hero__panel">
-        <!-- PLACEHOLDER: /assets/monogramme.png (PNG transparent) -->
-        <img class="hero__monogram" src="assets/monogramme.png" alt="" aria-hidden="true" width="120" height="120">
+        <!-- Décoratif, et peint en CSS (mask-image) comme le monogramme de la nav. -->
+        <span class="hero__monogram" aria-hidden="true"></span>
 
         <p class="hero__eyebrow">Le grand jour approche</p>
         <h1 class="hero__names">Juliette &amp; Dimitri</h1>

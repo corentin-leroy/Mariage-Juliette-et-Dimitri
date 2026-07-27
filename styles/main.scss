@@ -100,12 +100,21 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 
 .nav__brand {
-  font-family: $font-display;
-  font-style: italic;
-  font-size: 1.5rem;
-  color: $green-dark;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  white-space: nowrap;
+}
+
+// Le PNG (noir sur fond transparent) sert de masque : la couleur vient du background,
+// donc la teinte suit exactement $green-dark comme le reste de la nav.
+// 38 × 40px = ratio natif 466/487, calé sur la nav de $nav-height (64px).
+.nav__brand-mark {
+  display: block;
+  width: 38px;
+  height: 40px;
+  background-color: $green-dark;
+  -webkit-mask: url("../assets/monogramme.png") no-repeat center / contain;
+  mask: url("../assets/monogramme.png") no-repeat center / contain;
 }
 
 .nav__menu {
@@ -314,7 +323,17 @@ section[id] { scroll-margin-top: $nav-height; }
   .hero__countdown { text-shadow: none; }
 }
 
-.hero__monogram { display: block; width: 120px; height: auto; margin: 0 auto 16px; }
+// Même principe que .nav__brand-mark : le PNG sert de masque, la teinte vient du
+// background — d'où une hauteur explicite (120 × 125 = ratio natif 466/487).
+.hero__monogram {
+  display: block;
+  width: 120px;
+  height: 125px;
+  margin: 0 auto 16px;
+  background-color: $green-dark;
+  -webkit-mask: url("../assets/monogramme.png") no-repeat center / contain;
+  mask: url("../assets/monogramme.png") no-repeat center / contain;
+}
 .hero__eyebrow {
   font-family: $font-body;
   font-weight: 700;
