@@ -143,7 +143,15 @@ section[id] { scroll-margin-top: $nav-height; }
   padding: 8px 18px;
   white-space: nowrap;              // le libellé du CTA ne se coupe jamais en deux
   &:hover { color: #fff; }
-  &.is-active { border-bottom-color: transparent; }
+  // L'état actif d'un lien de nav (recolorer le texte) n'a pas de sens sur un bouton :
+  // .nav__link.is-active (2 classes) l'emportait sur .nav__cta (1 classe) et repeignait
+  // le libellé en $green-dark sur le fond $green — 2:1 de contraste, illisible.
+  // On garde le libellé blanc et on signale l'état par le fond foncé, comme au survol.
+  &.is-active {
+    color: #fff;
+    background: $green-dark;
+    border-bottom-color: transparent;
+  }
 }
 
 // Burger (masqué en desktop)

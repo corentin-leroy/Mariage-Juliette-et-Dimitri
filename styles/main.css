@@ -172,6 +172,8 @@ section[id] {
   color: #fff;
 }
 .nav__cta.is-active {
+  color: #fff;
+  background: #2D4A1E;
   border-bottom-color: transparent;
 }
 
