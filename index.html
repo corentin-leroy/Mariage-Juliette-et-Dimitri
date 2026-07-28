@@ -322,8 +322,23 @@
       </div>
 
       <p class="contact__text">Pour toute question, contactez-nous directement.</p>
-      <!-- PLACEHOLDER: email des mariés -->
-      <a class="btn contact__cta" href="mailto:juliette.et.dimitri@example.com">Nous écrire</a>
+
+      <!-- L'adresse email est volontairement absente du HTML (anti-récolte par les bots) :
+           elle est reconstruite par morceaux au chargement dans scripts/main.js (initContact),
+           qui pose le href mailto du bouton et remplit le repli ci-dessous.
+           href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page. -->
+      <a class="btn contact__cta is-pending" id="contact-cta" href="#contact" aria-disabled="true">Nous écrire</a>
+
+      <p class="contact__fallback" id="contact-fallback" hidden>
+        ou écrivez-nous à : <span class="contact__mail" id="contact-mail"></span>
+      </p>
+
+      <noscript>
+        <p class="contact__fallback">
+          Notre adresse email s’affiche ici une fois JavaScript activé : activez-le puis rechargez la page.
+          Sinon, laissez-nous un mot dans le <a href="#rsvp">formulaire de réponse</a> — nous vous recontacterons.
+        </p>
+      </noscript>
     </section>
 
     <!-- ═══════════ RSVP ═══════════ -->

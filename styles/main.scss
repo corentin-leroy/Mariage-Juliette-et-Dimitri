@@ -668,6 +668,29 @@ section[id] { scroll-margin-top: $nav-height; }
 .liste__cta,
 .contact__cta { display: block; width: fit-content; margin: 0 auto; }
 
+// État tant que le JS n'a pas reconstruit l'adresse (et état définitif si JS désactivé) :
+// le bouton se signale comme inactif au lieu de faire semblant de fonctionner.
+.contact__cta.is-pending {
+  background: $stone;
+  cursor: not-allowed;
+  &:hover { background: $stone; }
+}
+
+// Repli discret sous le bouton (injecté par JS, ou message statique du <noscript>)
+.contact__fallback {
+  max-width: 640px;
+  margin: 18px auto 0;
+  text-align: center;
+  font-size: .95rem;
+  color: $stone;
+}
+.contact__mail {
+  color: $ink;
+  font-weight: 700;
+  user-select: all;         // un simple clic sélectionne l'adresse entière
+  overflow-wrap: anywhere;  // pas de débordement à 375px
+}
+
 // ─── RSVP (#rsvp) ─────────────────────────────────────────────────
 .rsvp { max-width: 640px; margin: 0 auto; }
 .rsvp__form { display: flex; flex-direction: column; gap: 18px; }

@@ -2,12 +2,14 @@
 // 1. Compte à rebours temps réel (jours/heures/minutes/secondes) jusqu'au 14 juillet 2027 (hero).
 // 2. Nav : lien actif via IntersectionObserver + menu burger < 980px ($breakpoint-nav).
 // 3. Formulaire RSVP : logique conditionnelle, honeypot, validation, envoi fetch, confirmation, erreurs.
+// 4. Contact : reconstruction de l'adresse email (absente du HTML) + repli copiable.
 // Le scroll doux vers #rsvp est natif (ancres + scroll-behavior CSS).
 
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initNav();
   initRsvp();
+  initContact();
 });
 
 // ─── 1. Compte à rebours ──────────────────────────────────────────
@@ -278,4 +280,30 @@ function initRsvp() {
       submitBtn.textContent = originalLabel;
     }
   });
+}
+
+// ─── 4. Contact : email reconstruit + repli ───────────────────────
+function initContact() {
+  const cta = document.getElementById('contact-cta');
+  const fallback = document.getElementById('contact-fallback');
+  const mailOut = document.getElementById('contact-mail');
+  if (!cta && !fallback) return;
+
+  // Adresse stockée en fragments : elle n'existe en entier dans aucune chaîne
+  // du HTML ni du JS, seulement en mémoire après exécution. Le « @ » passe par
+  // son code de caractère pour qu'aucun motif « ...@... » ne soit lisible ici.
+  const user = ['juliette', 'chenuaud'].join('.');
+  const domain = ['gmail', 'com'].join('.');
+  const address = user + String.fromCharCode(64) + domain;
+
+  if (cta) {
+    cta.href = 'mailto:' + address + '?subject=' + encodeURIComponent('Question — Mariage');
+    cta.classList.remove('is-pending');
+    cta.removeAttribute('aria-disabled');
+  }
+
+  // Repli : l'invité dont le client mail ne s'ouvre pas (webmail, aucun client
+  // configuré) doit pouvoir lire et copier l'adresse sans quitter la page.
+  if (mailOut) mailOut.textContent = address;
+  if (fallback) fallback.hidden = false;
 }

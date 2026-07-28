@@ -807,6 +807,29 @@ section[id] {
   margin: 0 auto;
 }
 
+.contact__cta.is-pending {
+  background: #8C8A84;
+  cursor: not-allowed;
+}
+.contact__cta.is-pending:hover {
+  background: #8C8A84;
+}
+
+.contact__fallback {
+  max-width: 640px;
+  margin: 18px auto 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #8C8A84;
+}
+
+.contact__mail {
+  color: #1A1A1A;
+  font-weight: 700;
+  user-select: all;
+  overflow-wrap: anywhere;
+}
+
 .rsvp {
   max-width: 640px;
   margin: 0 auto;
