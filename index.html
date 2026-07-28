@@ -325,12 +325,16 @@
 
       <!-- L'adresse email est volontairement absente du HTML (anti-récolte par les bots) :
            elle est reconstruite par morceaux au chargement dans scripts/main.js (initContact),
-           qui pose le href mailto du bouton et remplit le repli ci-dessous.
-           href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page. -->
+           qui pose le href mailto du bouton et remplit le bloc adresse ci-dessous.
+           href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page.
+           Le bouton mailto est réservé au mobile (masqué au-delà de 640px) : sur ordinateur,
+           beaucoup d'invités n'ont aucun client mail configuré et le lien n'aboutirait pas. -->
       <a class="btn contact__cta is-pending" id="contact-cta" href="#contact" aria-disabled="true">Nous écrire</a>
 
       <p class="contact__fallback" id="contact-fallback" hidden>
-        ou écrivez-nous à : <span class="contact__mail" id="contact-mail"></span>
+        <span class="contact__lead contact__lead--desktop">Écrivez-nous à :</span>
+        <span class="contact__lead contact__lead--mobile">ou écrivez-nous à :</span>
+        <span class="contact__mail" id="contact-mail"></span>
       </p>
 
       <noscript>
@@ -388,23 +392,26 @@
             <div class="rsvp__row">
               <div class="rsvp__field">
                 <label for="rsvp-adults">Nombre d'adultes (vous compris) <span class="rsvp__req" aria-hidden="true">*</span></label>
-                <!-- Pas de required en dur : posé/retiré par le JS selon la branche Oui/Non -->
-                <input type="number" id="rsvp-adults" name="Adultes" min="1" max="20" value="1" inputmode="numeric">
+                <!-- Pas de required en dur : posé/retiré par le JS selon la branche Oui/Non.
+                     Valeur par défaut en placeholder et non en value : un champ réellement vide
+                     ne peut pas concaténer le chiffre saisi (1 tapé devant « 0 » donnait « 10 »).
+                     Les champs laissés vides sont normalisés à l'envoi dans scripts/main.js. -->
+                <input type="number" id="rsvp-adults" name="Adultes" min="1" max="20" placeholder="1" inputmode="numeric">
               </div>
               <div class="rsvp__field">
                 <label for="rsvp-children">Enfants (3 à 17 ans)</label>
-                <input type="number" id="rsvp-children" name="Enfants" min="0" max="20" value="0" inputmode="numeric">
+                <input type="number" id="rsvp-children" name="Enfants" min="0" max="20" placeholder="0" inputmode="numeric">
               </div>
             </div>
 
             <div class="rsvp__row">
               <div class="rsvp__field">
                 <label for="rsvp-babies">Bébés (moins de 3 ans)</label>
-                <input type="number" id="rsvp-babies" name="Bébés" min="0" max="10" value="0" inputmode="numeric">
+                <input type="number" id="rsvp-babies" name="Bébés" min="0" max="10" placeholder="0" inputmode="numeric">
               </div>
               <div class="rsvp__field rsvp__cribs" id="rsvp-cribs-field" hidden>
                 <label for="rsvp-cribs">Lits parapluie souhaités</label>
-                <input type="number" id="rsvp-cribs" name="Lits parapluie" min="0" max="0" value="0" inputmode="numeric">
+                <input type="number" id="rsvp-cribs" name="Lits parapluie" min="0" max="0" placeholder="0" inputmode="numeric">
                 <p class="rsvp__hint">Seulement 3 lits parapluies disponibles — premier arrivé premier servi. Les mariés vous confirmeront la disponibilité.</p>
               </div>
             </div>

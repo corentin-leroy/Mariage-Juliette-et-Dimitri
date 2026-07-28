@@ -815,12 +815,36 @@ section[id] {
   background: #8C8A84;
 }
 
+.contact__cta {
+  display: none;
+}
+
+.contact__lead--mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .contact__cta {
+    display: block;
+  }
+  .contact__lead--desktop {
+    display: none;
+  }
+  .contact__lead--mobile {
+    display: inline;
+  }
+}
 .contact__fallback {
   max-width: 640px;
   margin: 18px auto 0;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: #8C8A84;
+}
+@media (max-width: 640px) {
+  .contact__fallback {
+    font-size: 0.95rem;
+  }
 }
 
 .contact__mail {

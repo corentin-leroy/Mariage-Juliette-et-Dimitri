@@ -676,13 +676,25 @@ section[id] { scroll-margin-top: $nav-height; }
   &:hover { background: $stone; }
 }
 
-// Repli discret sous le bouton (injecté par JS, ou message statique du <noscript>)
+// Sur ordinateur, pas de bouton mailto : un poste sans client mail configuré
+// ouvrirait un onglet vide. L'adresse en clair, copiable, devient l'unique voie.
+.contact__cta { display: none; }
+.contact__lead--mobile { display: none; }
+
+@media (max-width: $breakpoint-mobile) {
+  .contact__cta { display: block; }
+  .contact__lead--desktop { display: none; }
+  .contact__lead--mobile { display: inline; }
+}
+
+// Adresse en clair : repli sous le bouton en mobile, contenu principal en desktop
 .contact__fallback {
   max-width: 640px;
   margin: 18px auto 0;
   text-align: center;
-  font-size: .95rem;
+  font-size: 1.05rem;
   color: $stone;
+  @media (max-width: $breakpoint-mobile) { font-size: .95rem; }
 }
 .contact__mail {
   color: $ink;

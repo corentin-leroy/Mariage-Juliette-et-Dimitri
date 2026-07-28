@@ -192,7 +192,9 @@ function initRsvp() {
       if ((parseInt(cribs.value, 10) || 0) > count) cribs.value = String(count);
     } else {
       cribsField.hidden = true;
-      cribs.value = '0';
+      // Champ vidé, pas remis à « 0 » : plus aucun chiffre littéral dans les champs
+      // nombre (cf. placeholders dans index.html). Le vide vaut 0 à l'envoi.
+      cribs.value = '';
       cribs.max = '0';
     }
   };
@@ -222,11 +224,14 @@ function initRsvp() {
     // sont masqués, on ne les regarde pas — un refus ne doit jamais être bloqué.
     // Le formulaire est en novalidate : c'est bien ici que l'obligation est appliquée.
     if (presence === 'Oui') {
+      // Champ adultes laissé vide = 1 (le libellé dit « vous compris ») : on ne bloque
+      // que sur une saisie explicitement invalide, jamais sur un champ non touché.
       const rawAdults = adults.value.trim();
-      if (!rawAdults) return 'Merci d’indiquer le nombre d’adultes (au moins 1).';
-      const nbAdults = Number(rawAdults);
-      if (!Number.isInteger(nbAdults) || nbAdults < 1) {
-        return 'Le nombre d’adultes doit être un nombre entier, au minimum 1.';
+      if (rawAdults) {
+        const nbAdults = Number(rawAdults);
+        if (!Number.isInteger(nbAdults) || nbAdults < 1) {
+          return 'Le nombre d’adultes doit être un nombre entier, au minimum 1.';
+        }
       }
 
       if (!arrivalRadios.some((r) => r.checked)) return 'Merci d’indiquer votre jour d’arrivée.';
@@ -256,6 +261,24 @@ function initRsvp() {
     if (problem) { showError(problem); return; }
 
     const firstname = form.querySelector('[name="Prénom"]').value.trim();
+
+    // Les champs nombre n'ont plus de valeur pré-remplie : un champ laissé vide doit
+    // arriver dans la Sheet comme un nombre, jamais comme une cellule vide. « Adultes »
+    // vaut 1 si l'invité vient (il compte au moins pour lui-même) et 0 s'il décline,
+    // pour que la colonne reste sommable sans gonfler le total avec des absents.
+    const attending = form.querySelector('[name="Présence"]:checked')?.value === 'Oui';
+    const payload = new FormData(form);
+    const fallbacks = {
+      'Adultes': attending ? '1' : '0',
+      'Enfants': '0',
+      'Bébés': '0',
+      'Lits parapluie': '0',
+    };
+    Object.entries(fallbacks).forEach(([name, fallback]) => {
+      const value = payload.get(name);
+      if (typeof value === 'string' && value.trim() === '') payload.set(name, fallback);
+    });
+
     submitBtn.disabled = true;
     const originalLabel = submitBtn.textContent;
     submitBtn.textContent = 'Envoi…';
@@ -264,7 +287,7 @@ function initRsvp() {
       const response = await fetch(form.action, {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
-        body: new FormData(form),
+        body: payload,
       });
       if (!response.ok) throw new Error('HTTP ' + response.status);
 
