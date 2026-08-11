@@ -874,6 +874,13 @@ section[id] {
   flex: 1;
 }
 
+.rsvp__row--counts {
+  align-items: start;
+}
+.rsvp__row--counts > .rsvp__field > label {
+  min-height: 3.4em;
+}
+
 .rsvp__field {
   display: flex;
   flex-direction: column;
@@ -1015,6 +1022,12 @@ section[id] {
   .rsvp__row {
     flex-direction: column;
     gap: 18px;
+  }
+  .rsvp__row--counts {
+    align-items: stretch;
+  }
+  .rsvp__row--counts > .rsvp__field > label {
+    min-height: 0;
   }
 }
 .footer {

@@ -708,6 +708,14 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__form { display: flex; flex-direction: column; gap: 18px; }
 .rsvp__row { display: flex; gap: 16px; }
 .rsvp__row > .rsvp__field { flex: 1; }
+// Rangée des trois compteurs (adultes / enfants / bébés) : « Nombre d'adultes
+// (vous compris) » tient sur deux lignes là où les deux autres labels en font une.
+// On cale les items en haut et on réserve deux lignes de label partout, pour que
+// les trois inputs démarrent exactement à la même hauteur.
+.rsvp__row--counts {
+  align-items: start;
+  > .rsvp__field > label { min-height: 3.4em; } // 2 lignes × line-height 1.7 du body
+}
 .rsvp__field { display: flex; flex-direction: column; gap: 6px; }
 .rsvp__field label,
 .rsvp__fieldset legend {
@@ -794,6 +802,13 @@ section[id] { scroll-margin-top: $nav-height; }
 
 @media (max-width: $breakpoint-mobile) {
   .rsvp__row { flex-direction: column; gap: 18px; }
+  // Champs empilés : plus rien à aligner. On rend leur largeur pleine (align-items
+  // agit sur l'axe horizontal une fois la colonne active) et on libère la hauteur
+  // de label réservée, qui laisserait sinon un vide au-dessus de chaque input.
+  .rsvp__row--counts {
+    align-items: stretch;
+    > .rsvp__field > label { min-height: 0; }
+  }
 }
 
 // ─── Footer ───────────────────────────────────────────────────────
