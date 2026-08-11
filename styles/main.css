@@ -932,6 +932,36 @@ section[id] {
   color: #8C8A84;
 }
 
+.rsvp__names {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 2px solid #C8A96E;
+  padding-left: 14px;
+}
+
+.rsvp__names-title {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #2D4A1E;
+}
+
+.rsvp__people {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.rsvp__person-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8C8A84;
+  margin-bottom: 8px;
+}
+
 .rsvp__logistics {
   display: flex;
   flex-direction: column;

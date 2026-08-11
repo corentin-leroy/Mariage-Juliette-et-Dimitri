@@ -734,6 +734,35 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__fieldset { border: none; }
 .rsvp__radio { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; font-weight: 400; }
 .rsvp__hint { font-size: .85rem; color: $stone; }
+
+// Blocs de noms générés (adultes 2..N, enfants) : le filet ocre à gauche les rattache
+// visuellement à leur compteur sans ajouter d'encadré lourd au formulaire.
+.rsvp__names {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 2px solid $ocre;
+  padding-left: 14px;
+}
+.rsvp__names-title {
+  font-family: $font-body;
+  font-weight: 700;
+  font-size: .95rem;
+  color: $green-dark;
+}
+.rsvp__people {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 4px;
+}
+.rsvp__person-title {
+  font-size: .8rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: $stone;
+  margin-bottom: 8px;
+}
 .rsvp__logistics { display: flex; flex-direction: column; gap: 18px; }
 
 .rsvp__error {

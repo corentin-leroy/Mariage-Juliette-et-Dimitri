@@ -211,7 +211,7 @@
 
       <ul class="logement__infos">
         <li>Linge de lit, linge de toilette et gel douche fournis par le château</li>
-        <li>3 lits parapluies disponibles sur demande (à indiquer dans le RSVP)</li>
+        <li>3 lits parapluies disponibles sur demande — merci de nous contacter directement si vous en avez besoin</li>
         <li>Pas d'ascenseur dans le domaine</li>
         <li>Animaux interdits</li>
         <li>Pas de service de nettoyage pendant le séjour</li>
@@ -402,18 +402,27 @@
                 <label for="rsvp-children">Enfants (3 à 17 ans)</label>
                 <input type="number" id="rsvp-children" name="Enfants" min="0" max="20" placeholder="0" inputmode="numeric">
               </div>
-            </div>
-
-            <div class="rsvp__row">
+              <!-- Bébés rapatriés sur cette ligne depuis la suppression des lits parapluie :
+                   les trois compteurs restent groupés, sans champ seul sur toute la largeur. -->
               <div class="rsvp__field">
                 <label for="rsvp-babies">Bébés (moins de 3 ans)</label>
                 <input type="number" id="rsvp-babies" name="Bébés" min="0" max="10" placeholder="0" inputmode="numeric">
               </div>
-              <div class="rsvp__field rsvp__cribs" id="rsvp-cribs-field" hidden>
-                <label for="rsvp-cribs">Lits parapluie souhaités</label>
-                <input type="number" id="rsvp-cribs" name="Lits parapluie" min="0" max="0" placeholder="0" inputmode="numeric">
-                <p class="rsvp__hint">Seulement 3 lits parapluies disponibles — premier arrivé premier servi. Les mariés vous confirmeront la disponibilité.</p>
-              </div>
+            </div>
+
+            <!-- Blocs « Prénom / Nom » générés par le JS (initRsvp → applyPeople).
+                 Leurs inputs n'ont volontairement AUCUN attribut name : ils ne sont pas
+                 soumis un par un (sinon le nombre de colonnes de la Sheet varierait),
+                 ils alimentent les deux champs cachés concaténés plus bas. -->
+            <div class="rsvp__names" id="rsvp-adult-names" hidden>
+              <p class="rsvp__names-title">Les autres adultes</p>
+              <p class="rsvp__hint">Vous êtes l'adulte 1, indiquez le nom des autres adultes.</p>
+              <div class="rsvp__people" id="rsvp-adult-people"></div>
+            </div>
+
+            <div class="rsvp__names" id="rsvp-child-names" hidden>
+              <p class="rsvp__names-title">Les enfants</p>
+              <div class="rsvp__people" id="rsvp-child-people"></div>
             </div>
 
             <fieldset class="rsvp__field rsvp__fieldset">
@@ -451,6 +460,11 @@
             <label for="rsvp-message">Message pour les mariés</label>
             <textarea id="rsvp-message" name="Message" rows="4"></textarea>
           </div>
+
+          <!-- Deux colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
+               concaténation des noms saisis dans les blocs ci-dessus, séparés par " ; ". -->
+          <input type="hidden" name="Noms adultes" id="rsvp-adult-names-value">
+          <input type="hidden" name="Noms enfants" id="rsvp-child-names-value">
 
           <p class="rsvp__error" id="rsvp-error" role="alert" hidden></p>
 

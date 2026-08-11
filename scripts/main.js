@@ -140,9 +140,6 @@ function initRsvp() {
   const logistics = document.getElementById('rsvp-logistics');
   const emailInput = document.getElementById('rsvp-email');
   const emailReq = document.getElementById('rsvp-email-req');
-  const babies = document.getElementById('rsvp-babies');
-  const cribsField = document.getElementById('rsvp-cribs-field');
-  const cribs = document.getElementById('rsvp-cribs');
   const errorBox = document.getElementById('rsvp-error');
   const success = document.getElementById('rsvp-success');
   const successName = document.getElementById('rsvp-success-name');
@@ -183,25 +180,128 @@ function initRsvp() {
   };
   presenceRadios.forEach((r) => r.addEventListener('change', applyPresence));
 
-  // Bébés ≥ 1 → champ lits parapluie (max = nombre de bébés)
-  const applyBabies = () => {
-    const count = parseInt(babies.value, 10) || 0;
-    if (count >= 1) {
-      cribsField.hidden = false;
-      cribs.max = String(count);
-      if ((parseInt(cribs.value, 10) || 0) > count) cribs.value = String(count);
-    } else {
-      cribsField.hidden = true;
-      // Champ vidé, pas remis à « 0 » : plus aucun chiffre littéral dans les champs
-      // nombre (cf. placeholders dans index.html). Le vide vaut 0 à l'envoi.
-      cribs.value = '';
-      cribs.max = '0';
-    }
+  // Le nombre de bébés est un simple compteur : aucune logique attachée.
+
+  // ─── Noms des participants (adultes 2..N et enfants 1..M) ───────
+  // Le répondant (Prénom / Nom en haut du formulaire) EST l'adulte 1 : les blocs
+  // générés ici ne concernent que les personnes en plus. Les bébés restent un
+  // simple compteur, sans nom.
+  const children = document.getElementById('rsvp-children');
+  const adultNames = document.getElementById('rsvp-adult-names');
+  const adultPeople = document.getElementById('rsvp-adult-people');
+  const childNames = document.getElementById('rsvp-child-names');
+  const childPeople = document.getElementById('rsvp-child-people');
+  const adultNamesValue = document.getElementById('rsvp-adult-names-value');
+  const childNamesValue = document.getElementById('rsvp-child-names-value');
+
+  // Un bloc = un titre + une ligne « Prénom / Nom » reprenant les classes des champs
+  // existants (donc côte à côte en desktop, empilés sous 640px). Aucun attribut name :
+  // ces champs alimentent les deux colonnes concaténées, ils ne sont jamais soumis seuls.
+  const buildPerson = (key, index, title) => {
+    const block = document.createElement('div');
+    block.className = 'rsvp__person';
+    const id = 'rsvp-' + key + '-' + index;
+    block.innerHTML =
+      '<p class="rsvp__person-title">' + title + '</p>' +
+      '<div class="rsvp__row">' +
+        '<div class="rsvp__field">' +
+          '<label for="' + id + '-first">Prénom <span class="rsvp__req" aria-hidden="true">*</span></label>' +
+          '<input type="text" id="' + id + '-first" data-role="first" autocomplete="off">' +
+        '</div>' +
+        '<div class="rsvp__field">' +
+          '<label for="' + id + '-last">Nom <span class="rsvp__req" aria-hidden="true">*</span></label>' +
+          '<input type="text" id="' + id + '-last" data-role="last" autocomplete="off">' +
+        '</div>' +
+      '</div>';
+    return block;
   };
-  babies.addEventListener('input', applyBabies);
+
+  // Ajustement par la fin uniquement : les blocs conservés gardent leur saisie
+  // quand le compteur change (passer de 3 à 2 adultes ne réinitialise rien).
+  const syncPeople = (section, container, count, key, label, offset) => {
+    while (container.children.length > count) container.lastElementChild.remove();
+    while (container.children.length < count) {
+      const number = container.children.length + offset;
+      container.appendChild(buildPerson(key, number, label + ' ' + number));
+    }
+    section.hidden = count === 0;
+  };
+
+  // Un compteur vide vaut sa valeur par défaut (1 adulte, 0 enfant), cohérent avec
+  // les placeholders et avec la normalisation à l'envoi.
+  const countFrom = (input, fallback) => {
+    const raw = input.value.trim();
+    if (!raw) return fallback;
+    const value = Number(raw);
+    if (!Number.isInteger(value) || value < 0) return fallback;
+    return value;
+  };
+
+  const applyPeople = () => {
+    // Compteur ramené à son max déclaré : garantit que le nombre de blocs de noms
+    // correspond toujours au nombre annoncé.
+    [adults, children].forEach((input) => {
+      const max = Number(input.max);
+      const value = Number(input.value.trim());
+      if (Number.isInteger(value) && Number.isFinite(max) && value > max) input.value = String(max);
+    });
+
+    const nbAdults = Math.max(countFrom(adults, 1), 1);
+    syncPeople(adultNames, adultPeople, nbAdults - 1, 'adult', 'Adulte', 2);
+    syncPeople(childNames, childPeople, countFrom(children, 0), 'child', 'Enfant', 1);
+  };
+  adults.addEventListener('input', applyPeople);
+  children.addEventListener('input', applyPeople);
+
+  const personFields = (block) => ({
+    first: block.querySelector('[data-role="first"]').value.trim(),
+    last: block.querySelector('[data-role="last"]').value.trim(),
+  });
+
+  // Validation explicite : ces champs n'ayant pas de name, l'attribut required ne
+  // suffirait pas (et le formulaire est en novalidate).
+  const checkNames = () => {
+    const groups = [
+      { container: adultPeople, label: 'l’adulte', offset: 2 },
+      { container: childPeople, label: 'l’enfant', offset: 1 },
+    ];
+    for (const group of groups) {
+      const blocks = Array.from(group.container.children);
+      for (let i = 0; i < blocks.length; i++) {
+        const { first, last } = personFields(blocks[i]);
+        const who = group.label + ' ' + (i + group.offset);
+        if (!first) return 'Merci d’indiquer le prénom de ' + who + '.';
+        if (!last) return 'Merci d’indiquer le nom de ' + who + '.';
+      }
+    }
+    return null;
+  };
+
+  // Concaténation vers les deux colonnes de la Sheet. Sur un refus, les deux champs
+  // partent vides : personne ne vient, au même titre que les compteurs à 0.
+  const collectNames = (attending) => {
+    if (!attending) {
+      adultNamesValue.value = '';
+      childNamesValue.value = '';
+      return;
+    }
+    // « prénom|nom » : le « | » garde la frontière prénom / nom exploitable, y compris
+    // pour les prénoms et noms composés. Une personne entièrement vide est ignorée,
+    // et le filtre évite tout « ; » en trop en début ou en fin de chaîne.
+    const entry = (first, last) => (!first && !last ? '' : first + '|' + last);
+    const personEntry = (block) => {
+      const { first, last } = personFields(block);
+      return entry(first, last);
+    };
+    const respondent = entry(form.querySelector('[name="Prénom"]').value.trim(),
+                             form.querySelector('[name="Nom"]').value.trim());
+    const adultList = [respondent, ...Array.from(adultPeople.children).map(personEntry)];
+    adultNamesValue.value = adultList.filter(Boolean).join(' ; ');
+    childNamesValue.value = Array.from(childPeople.children).map(personEntry).filter(Boolean).join(' ; ');
+  };
 
   applyPresence();
-  applyBabies();
+  applyPeople();
 
   const showError = (msg) => {
     errorBox.textContent = msg;
@@ -233,6 +333,10 @@ function initRsvp() {
           return 'Le nombre d’adultes doit être un nombre entier, au minimum 1.';
         }
       }
+
+      // Tout bloc de nom affiché doit être complet (prénom ET nom)
+      const missingName = checkNames();
+      if (missingName) return missingName;
 
       if (!arrivalRadios.some((r) => r.checked)) return 'Merci d’indiquer votre jour d’arrivée.';
       if (!lodgingRadios.some((r) => r.checked)) {
@@ -267,12 +371,12 @@ function initRsvp() {
     // vaut 1 si l'invité vient (il compte au moins pour lui-même) et 0 s'il décline,
     // pour que la colonne reste sommable sans gonfler le total avec des absents.
     const attending = form.querySelector('[name="Présence"]:checked')?.value === 'Oui';
+    collectNames(attending);   // remplit les deux champs cachés avant la lecture du formulaire
     const payload = new FormData(form);
     const fallbacks = {
       'Adultes': attending ? '1' : '0',
       'Enfants': '0',
       'Bébés': '0',
-      'Lits parapluie': '0',
     };
     Object.entries(fallbacks).forEach(([name, fallback]) => {
       const value = payload.get(name);
