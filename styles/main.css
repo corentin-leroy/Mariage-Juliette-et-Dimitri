@@ -638,160 +638,21 @@ section[id] {
     height: 260px;
   }
 }
-.logement__intro,
-.logement__note {
+.logement__intro {
   max-width: 680px;
   margin: 0 auto 20px;
   text-align: center;
 }
 
-.logement__note {
-  font-family: "Cormorant Garamond", serif;
-  font-style: italic;
-  color: #8C8A84;
-}
-
 .logement__infos {
   max-width: 680px;
-  margin: 0 auto 36px;
+  margin: 0 auto;
   padding-left: 22px;
 }
 .logement__infos li {
   margin-bottom: 6px;
 }
 
-.logement__table {
-  max-width: 960px;
-  margin: 0 auto;
-  width: 100%;
-  border-collapse: collapse;
-  background: #FAF5EC;
-  border: 1.5px solid #C8A96E;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(45, 74, 30, 0.06);
-}
-.logement__table th, .logement__table td {
-  padding: 13px 18px;
-  text-align: left;
-  vertical-align: baseline;
-}
-.logement__table thead th {
-  font-family: "Lato", sans-serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  color: #2D4A1E;
-  background: rgba(200, 169, 110, 0.15);
-  border-bottom: 1px solid rgba(200, 169, 110, 0.45);
-}
-.logement__table .num {
-  text-align: right;
-}
-.logement__table tbody td {
-  border-bottom: 1px solid rgba(200, 169, 110, 0.18);
-}
-.logement__table tbody tr:not(.logement__group):nth-of-type(even) td {
-  background: rgba(200, 169, 110, 0.07);
-}
-.logement__table tbody:last-of-type tr:last-child td {
-  border-bottom: none;
-}
-
-.logement__group-th {
-  font-family: "Lato", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  font-size: 0.9rem;
-  color: #5C7A3E;
-  background: rgba(200, 169, 110, 0.08);
-  border-top: 1px solid rgba(200, 169, 110, 0.3);
-  border-bottom: 1px solid rgba(200, 169, 110, 0.3);
-}
-
-.logement__table tbody:first-of-type .logement__group-th {
-  border-top: none;
-}
-
-.logement__orn {
-  color: #C8A96E;
-  margin-right: 8px;
-}
-
-.logement__table .logement__cell--sleep {
-  color: #1A1A1A;
-}
-
-.logement__table .logement__price--night {
-  text-align: right;
-  color: #8C8A84;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.logement__table .logement__price--total {
-  text-align: right;
-  color: #2D4A1E;
-  font-weight: 700;
-  font-size: 1.1rem;
-  white-space: nowrap;
-}
-
-@media (max-width: 640px) {
-  .logement__table {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
-  .logement__table thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  .logement__table tr.logement__group {
-    display: block;
-    margin: 0;
-  }
-  .logement__table .logement__group-th {
-    display: block;
-    background: transparent;
-    border: none;
-    padding: 10px 4px 6px;
-    text-align: left;
-  }
-  .logement__table tbody tr:not(.logement__group) {
-    display: block;
-    background: #FAF5EC;
-    border: 1px solid rgba(200, 169, 110, 0.45);
-    border-radius: 8px;
-    padding: 6px 16px;
-    margin-bottom: 14px;
-  }
-  .logement__table tbody td {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(200, 169, 110, 0.18);
-  }
-  .logement__table tr td:last-child {
-    border-bottom: none;
-  }
-  .logement__table td::before {
-    content: attr(data-label);
-    font-weight: 700;
-    color: #2D4A1E;
-    text-align: left;
-  }
-}
 .liste__text,
 .contact__text {
   max-width: 640px;
