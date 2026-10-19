@@ -462,7 +462,8 @@ section[id] { scroll-margin-top: $nav-height; }
   max-width: $content-max;
   margin: 0 auto 40px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  // 4 modes : grille 2 × 2 (en 4 colonnes, ~170px de texte par carte, titres et GPS hachés)
+  grid-template-columns: repeat(2, 1fr);
   gap: 22px;
 }
 
@@ -516,21 +517,9 @@ section[id] { scroll-margin-top: $nav-height; }
   iframe { display: block; width: 100%; height: 600px; border: 0; }
 }
 .venir__rental { max-width: $content-max; margin: 0 auto; text-align: center; }
-.venir__rental-title { font-size: 1.3rem; margin-bottom: 20px; }
-.venir__rental-groups {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
-}
-.venir__rental-from {
-  font-family: $font-body;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-size: .78rem;
-  color: $green;
-  margin-bottom: 12px;
-}
+.venir__rental-title { font-size: 1.3rem; margin-bottom: 8px; }
+// Liste unique de marques : les mêmes agences servent Annecy et l'aéroport de Genève
+.venir__rental-note { color: $stone; margin-bottom: 20px; }
 .venir__rental-links {
   list-style: none;
   display: flex;
@@ -541,7 +530,6 @@ section[id] { scroll-margin-top: $nav-height; }
 
 @media (max-width: $breakpoint-mobile) {
   .venir__modes { grid-template-columns: 1fr; }
-  .venir__rental-groups { grid-template-columns: 1fr; }
   .venir__map iframe { height: 260px; }
 }
 
@@ -625,6 +613,7 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__field input[type="text"],
 .rsvp__field input[type="email"],
 .rsvp__field input[type="number"],
+.rsvp__field select,
 .rsvp__field textarea {
   font-family: $font-body;
   font-size: 1rem;
@@ -636,9 +625,39 @@ section[id] { scroll-margin-top: $nav-height; }
   &:focus { border-color: $green; }
 }
 .rsvp__field textarea { resize: vertical; }
+// Libellés de plat longs : sans min-width: 0, la largeur intrinsèque du select
+// (option la plus longue) pourrait déborder à 375px.
+.rsvp__field select { width: 100%; min-width: 0; }
 .rsvp__fieldset { border: none; }
 .rsvp__radio { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; font-weight: 400; }
+// Radios à libellé long (choix du plat) : une option par ligne, radio calé sur la 1re ligne
+.rsvp__fieldset--stacked .rsvp__radio {
+  display: flex;
+  align-items: baseline;
+  margin-right: 0;
+}
 .rsvp__hint { font-size: .85rem; color: $stone; }
+
+// Présentation du menu, au-dessus du choix du plat (encadré crème .card)
+.rsvp__menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  dt {
+    font-size: .8rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: $stone;
+  }
+  dd {
+    font-family: $font-display;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    color: $green-dark;
+  }
+}
 
 // Blocs de noms générés (adultes 2..N, enfants) : le filet ocre à gauche les rattache
 // visuellement à leur compteur sans ajouter d'encadré lourd au formulaire.
@@ -649,7 +668,8 @@ section[id] { scroll-margin-top: $nav-height; }
   border-left: 2px solid $ocre;
   padding-left: 14px;
 }
-.rsvp__names-title {
+.rsvp__names-title,
+.rsvp__menu-title {
   font-family: $font-body;
   font-weight: 700;
   font-size: .95rem;
@@ -668,6 +688,8 @@ section[id] { scroll-margin-top: $nav-height; }
   color: $stone;
   margin-bottom: 8px;
 }
+// Plat de l'adulte 2..N : sous sa ligne Prénom / Nom, même écart que les champs empilés
+.rsvp__person-dish { margin-top: 18px; }
 .rsvp__logistics { display: flex; flex-direction: column; gap: 18px; }
 
 .rsvp__error {

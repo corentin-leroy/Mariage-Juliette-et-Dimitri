@@ -152,14 +152,23 @@ function initRsvp() {
   const adults = document.getElementById('rsvp-adults');
   const arrivalRadios = Array.from(form.querySelectorAll('[name="Arrivée"]'));
   const lodgingRadios = Array.from(form.querySelectorAll('[name="Logement"]'));
-  const requiredLogistics = [adults, ...arrivalRadios, ...lodgingRadios].filter(Boolean);
-  // Filet de sécurité : tout champ du bloc logistique, y compris ceux ajoutés plus tard
-  const allLogisticsFields = Array.from(logistics.querySelectorAll('input, select, textarea'));
+  // Plat du répondant (adulte 1). Les value de ces radios sont aussi la source des
+  // options des listes déroulantes des adultes 2..N : un seul endroit pour les libellés.
+  const respondentDishRadios = Array.from(form.querySelectorAll('[name="plat-repondant"]'));
+  const dishLabels = respondentDishRadios.map((r) => r.value);
+  const requiredLogistics = [adults, ...arrivalRadios, ...lodgingRadios, ...respondentDishRadios].filter(Boolean);
+  // Filet de sécurité : tout champ du bloc logistique, y compris ceux générés plus tard
+  // (listes de plat des adultes 2..N) — d'où une requête refaite à chaque appel.
+  const allLogisticsFields = () => logistics.querySelectorAll('input, select, textarea');
+  const dishSelects = () => logistics.querySelectorAll('select[data-role="dish"]');
+  // État courant, pour qu'une liste de plat créée après coup naisse avec le bon required
+  let logisticsRequired = false;
 
   const applyLogisticsRequired = (required) => {
+    logisticsRequired = required;
     // On repart toujours de zéro : garantit qu'aucun champ masqué ne reste required
-    allLogisticsFields.forEach((el) => { el.required = false; });
-    if (required) requiredLogistics.forEach((el) => { el.required = true; });
+    allLogisticsFields().forEach((el) => { el.required = false; });
+    if (required) [...requiredLogistics, ...dishSelects()].forEach((el) => { el.required = true; });
   };
 
   // Présence Oui/Non → affichage logistique + email requis
@@ -193,10 +202,12 @@ function initRsvp() {
   const childPeople = document.getElementById('rsvp-child-people');
   const adultNamesValue = document.getElementById('rsvp-adult-names-value');
   const childNamesValue = document.getElementById('rsvp-child-names-value');
+  const adultDishesValue = document.getElementById('rsvp-adult-dishes-value');
 
   // Un bloc = un titre + une ligne « Prénom / Nom » reprenant les classes des champs
   // existants (donc côte à côte en desktop, empilés sous 640px). Aucun attribut name :
-  // ces champs alimentent les deux colonnes concaténées, ils ne sont jamais soumis seuls.
+  // ces champs alimentent les colonnes concaténées, ils ne sont jamais soumis seuls.
+  // Les adultes ont en plus une liste « Plat principal » sous leur nom ; pas les enfants.
   const buildPerson = (key, index, title) => {
     const block = document.createElement('div');
     block.className = 'rsvp__person';
@@ -213,6 +224,20 @@ function initRsvp() {
           '<input type="text" id="' + id + '-last" data-role="last" autocomplete="off">' +
         '</div>' +
       '</div>';
+
+    if (key === 'adult') {
+      const field = document.createElement('div');
+      field.className = 'rsvp__field rsvp__person-dish';
+      field.innerHTML =
+        '<label for="' + id + '-dish">Plat principal <span class="rsvp__req" aria-hidden="true">*</span></label>' +
+        '<select id="' + id + '-dish" data-role="dish"></select>';
+      const select = field.querySelector('select');
+      // Option vide par défaut : aucun plat n'est présélectionné à la place de l'invité
+      select.add(new Option('Choisir un plat…', ''));
+      dishLabels.forEach((label) => select.add(new Option(label, label)));
+      select.required = logisticsRequired;
+      block.appendChild(field);
+    }
     return block;
   };
 
@@ -256,33 +281,37 @@ function initRsvp() {
   const personFields = (block) => ({
     first: block.querySelector('[data-role="first"]').value.trim(),
     last: block.querySelector('[data-role="last"]').value.trim(),
+    dish: block.querySelector('[data-role="dish"]')?.value ?? '',   // vide pour un enfant
   });
 
   // Validation explicite : ces champs n'ayant pas de name, l'attribut required ne
-  // suffirait pas (et le formulaire est en novalidate).
+  // suffirait pas (et le formulaire est en novalidate). Bloc par bloc, dans l'ordre
+  // de l'écran : prénom, nom, puis plat pour les adultes.
   const checkNames = () => {
     const groups = [
-      { container: adultPeople, label: 'l’adulte', offset: 2 },
-      { container: childPeople, label: 'l’enfant', offset: 1 },
+      { container: adultPeople, label: 'l’adulte', offset: 2, withDish: true },
+      { container: childPeople, label: 'l’enfant', offset: 1, withDish: false },
     ];
     for (const group of groups) {
       const blocks = Array.from(group.container.children);
       for (let i = 0; i < blocks.length; i++) {
-        const { first, last } = personFields(blocks[i]);
+        const { first, last, dish } = personFields(blocks[i]);
         const who = group.label + ' ' + (i + group.offset);
         if (!first) return 'Merci d’indiquer le prénom de ' + who + '.';
         if (!last) return 'Merci d’indiquer le nom de ' + who + '.';
+        if (group.withDish && !dish) return 'Merci de choisir le plat principal de ' + who + '.';
       }
     }
     return null;
   };
 
-  // Concaténation vers les deux colonnes de la Sheet. Sur un refus, les deux champs
-  // partent vides : personne ne vient, au même titre que les compteurs à 0.
+  // Concaténation vers les colonnes de la Sheet. Sur un refus, les champs partent
+  // vides : personne ne vient, au même titre que les compteurs à 0.
   const collectNames = (attending) => {
     if (!attending) {
       adultNamesValue.value = '';
       childNamesValue.value = '';
+      adultDishesValue.value = '';
       return;
     }
     // « prénom|nom » : le « | » garde la frontière prénom / nom exploitable, y compris
@@ -293,10 +322,20 @@ function initRsvp() {
       const { first, last } = personFields(block);
       return entry(first, last);
     };
-    const respondent = entry(form.querySelector('[name="Prénom"]').value.trim(),
-                             form.querySelector('[name="Nom"]').value.trim());
-    const adultList = [respondent, ...Array.from(adultPeople.children).map(personEntry)];
-    adultNamesValue.value = adultList.filter(Boolean).join(' ; ');
+    // Adultes traités en paires { nom, plat } filtrées UNE seule fois : « Plats adultes »
+    // reste ainsi aligné sur « Noms adultes » (le n-ième plat est celui du n-ième nom).
+    const respondent = {
+      name: entry(form.querySelector('[name="Prénom"]').value.trim(),
+                  form.querySelector('[name="Nom"]').value.trim()),
+      dish: respondentDishRadios.find((r) => r.checked)?.value ?? '',
+    };
+    const others = Array.from(adultPeople.children).map((block) => {
+      const { first, last, dish } = personFields(block);
+      return { name: entry(first, last), dish };
+    });
+    const adultList = [respondent, ...others].filter((adult) => adult.name);
+    adultNamesValue.value = adultList.map((adult) => adult.name).join(' ; ');
+    adultDishesValue.value = adultList.map((adult) => adult.dish).join(' ; ');
     childNamesValue.value = Array.from(childPeople.children).map(personEntry).filter(Boolean).join(' ; ');
   };
 
@@ -324,6 +363,15 @@ function initRsvp() {
     // sont masqués, on ne les regarde pas — un refus ne doit jamais être bloqué.
     // Le formulaire est en novalidate : c'est bien ici que l'obligation est appliquée.
     if (presence === 'Oui') {
+      // Contrôles dans l'ordre de l'écran : arrivée, logement, plat du répondant, puis
+      // compteurs et blocs de noms (avec le plat des adultes 2..N).
+      if (!arrivalRadios.some((r) => r.checked)) return 'Merci d’indiquer votre jour d’arrivée.';
+      if (!lodgingRadios.some((r) => r.checked)) {
+        return 'Merci d’indiquer si vous avez besoin d’un logement sur place.';
+      }
+
+      if (!respondentDishRadios.some((r) => r.checked)) return 'Merci de choisir votre plat principal.';
+
       // Champ adultes laissé vide = 1 (le libellé dit « vous compris ») : on ne bloque
       // que sur une saisie explicitement invalide, jamais sur un champ non touché.
       const rawAdults = adults.value.trim();
@@ -337,11 +385,6 @@ function initRsvp() {
       // Tout bloc de nom affiché doit être complet (prénom ET nom)
       const missingName = checkNames();
       if (missingName) return missingName;
-
-      if (!arrivalRadios.some((r) => r.checked)) return 'Merci d’indiquer votre jour d’arrivée.';
-      if (!lodgingRadios.some((r) => r.checked)) {
-        return 'Merci d’indiquer si vous avez besoin d’un logement sur place.';
-      }
     }
 
     if (emailInput.required) {
@@ -371,8 +414,11 @@ function initRsvp() {
     // vaut 1 si l'invité vient (il compte au moins pour lui-même) et 0 s'il décline,
     // pour que la colonne reste sommable sans gonfler le total avec des absents.
     const attending = form.querySelector('[name="Présence"]:checked')?.value === 'Oui';
-    collectNames(attending);   // remplit les deux champs cachés avant la lecture du formulaire
+    collectNames(attending);   // remplit les champs cachés avant la lecture du formulaire
     const payload = new FormData(form);
+    // Le name des radios de plat ne sert qu'à les grouper : le plat du répondant part
+    // déjà dans « Plats adultes », pas de colonne en plus dans la Sheet.
+    payload.delete('plat-repondant');
     const fallbacks = {
       'Adultes': attending ? '1' : '0',
       'Enfants': '0',

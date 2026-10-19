@@ -517,7 +517,7 @@ section[id] {
   max-width: 960px;
   margin: 0 auto 40px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 22px;
 }
 
@@ -600,23 +600,12 @@ section[id] {
 
 .venir__rental-title {
   font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.venir__rental-note {
+  color: #8C8A84;
   margin-bottom: 20px;
-}
-
-.venir__rental-groups {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
-}
-
-.venir__rental-from {
-  font-family: "Lato", sans-serif;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  color: #5C7A3E;
-  margin-bottom: 12px;
 }
 
 .venir__rental-links {
@@ -629,9 +618,6 @@ section[id] {
 
 @media (max-width: 640px) {
   .venir__modes {
-    grid-template-columns: 1fr;
-  }
-  .venir__rental-groups {
     grid-template-columns: 1fr;
   }
   .venir__map iframe {
@@ -763,6 +749,7 @@ section[id] {
 .rsvp__field input[type=text],
 .rsvp__field input[type=email],
 .rsvp__field input[type=number],
+.rsvp__field select,
 .rsvp__field textarea {
   font-family: "Lato", sans-serif;
   font-size: 1rem;
@@ -775,12 +762,18 @@ section[id] {
 .rsvp__field input[type=text]:focus,
 .rsvp__field input[type=email]:focus,
 .rsvp__field input[type=number]:focus,
+.rsvp__field select:focus,
 .rsvp__field textarea:focus {
   border-color: #5C7A3E;
 }
 
 .rsvp__field textarea {
   resize: vertical;
+}
+
+.rsvp__field select {
+  width: 100%;
+  min-width: 0;
 }
 
 .rsvp__fieldset {
@@ -795,9 +788,35 @@ section[id] {
   font-weight: 400;
 }
 
+.rsvp__fieldset--stacked .rsvp__radio {
+  display: flex;
+  align-items: baseline;
+  margin-right: 0;
+}
+
 .rsvp__hint {
   font-size: 0.85rem;
   color: #8C8A84;
+}
+
+.rsvp__menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.rsvp__menu-list dt {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8C8A84;
+}
+.rsvp__menu-list dd {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #2D4A1E;
 }
 
 .rsvp__names {
@@ -808,7 +827,8 @@ section[id] {
   padding-left: 14px;
 }
 
-.rsvp__names-title {
+.rsvp__names-title,
+.rsvp__menu-title {
   font-family: "Lato", sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
@@ -828,6 +848,10 @@ section[id] {
   text-transform: uppercase;
   color: #8C8A84;
   margin-bottom: 8px;
+}
+
+.rsvp__person-dish {
+  margin-top: 18px;
 }
 
 .rsvp__logistics {

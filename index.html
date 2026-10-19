@@ -58,7 +58,7 @@
 
         <p class="hero__eyebrow">Le grand jour approche</p>
         <h1 class="hero__names">Juliette &amp; Dimitri</h1>
-        <p class="hero__date">14 &amp; 15 Juillet 2027 · Château de Faverges, Haute-Savoie</p>
+        <p class="hero__date">14 &amp; 15 juillet 2027 · Château de Faverges, Haute-Savoie</p>
 
         <!-- Compte à rebours temps réel. La liste est aria-hidden : un aria-live qui change
              chaque seconde noierait les lecteurs d'écran. Le résumé sr-only ci-dessous prend
@@ -116,7 +116,7 @@
       </div>
 
       <address class="venir__address">
-        Château de Faverges — 293 Chemin de la vie laine, 74210 Faverges-Seythenex
+        Château de Faverges — 293 Chemin de la Vie Plaine, 74210 Faverges-Seythenex
       </address>
 
       <ul class="venir__modes">
@@ -152,6 +152,21 @@
           <span class="venir__mode-icon" aria-hidden="true">
             <span class="venir__mode-icon-inner">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="4" width="12" height="13" rx="2.5"/>
+                <path d="M6 11h12"/>
+                <circle cx="9.5" cy="14" r="0.5"/>
+                <circle cx="14.5" cy="14" r="0.5"/>
+                <path d="M8.5 17l-2 3M15.5 17l2 3"/>
+              </svg>
+            </span>
+          </span>
+          <h3 class="venir__mode-title">En train (Albertville)</h3>
+          <p class="venir__mode-text">Gare d'Albertville → <strong class="venir__mode-time">15 min</strong> en voiture (≈ 4h11 depuis Paris)</p>
+        </li>
+        <li class="venir__mode">
+          <span class="venir__mode-icon" aria-hidden="true">
+            <span class="venir__mode-icon-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 3c.7 0 1.2.6 1.2 1.5v5.3l7.3 3.7v1.8l-7.3-1.8v3.4l1.8 1.3v1.4L12 19.5 9 20.4v-1.4l1.8-1.3v-3.4L3.5 16.3v-1.8l7.3-3.7V4.5C10.8 3.6 11.3 3 12 3z"/>
               </svg>
             </span>
@@ -172,24 +187,13 @@
 
       <div class="venir__rental">
         <h3 class="venir__rental-title">Louer une voiture</h3>
-        <div class="venir__rental-groups">
-          <div class="venir__rental-group">
-            <p class="venir__rental-from">Depuis Annecy</p>
-            <ul class="venir__rental-links">
-              <li><a class="btn btn--ghost" href="https://www.europcar.fr" target="_blank" rel="noopener">Europcar</a></li>
-              <li><a class="btn btn--ghost" href="https://www.hertz.fr" target="_blank" rel="noopener">Hertz</a></li>
-              <li><a class="btn btn--ghost" href="https://www.enterprise.fr" target="_blank" rel="noopener">Enterprise</a></li>
-            </ul>
-          </div>
-          <div class="venir__rental-group">
-            <p class="venir__rental-from">Depuis Genève</p>
-            <ul class="venir__rental-links">
-              <li><a class="btn btn--ghost" href="https://www.europcar.fr" target="_blank" rel="noopener">Europcar GVA</a></li>
-              <li><a class="btn btn--ghost" href="https://www.sixt.fr" target="_blank" rel="noopener">Sixt GVA</a></li>
-              <li><a class="btn btn--ghost" href="https://www.hertz.fr" target="_blank" rel="noopener">Hertz GVA</a></li>
-            </ul>
-          </div>
-        </div>
+        <p class="venir__rental-note">Location de voiture disponible à Annecy comme à l'aéroport de Genève.</p>
+        <ul class="venir__rental-links">
+          <li><a class="btn btn--ghost" href="https://www.europcar.fr" target="_blank" rel="noopener">Europcar</a></li>
+          <li><a class="btn btn--ghost" href="https://www.hertz.fr" target="_blank" rel="noopener">Hertz</a></li>
+          <li><a class="btn btn--ghost" href="https://www.enterprise.fr" target="_blank" rel="noopener">Enterprise</a></li>
+          <li><a class="btn btn--ghost" href="https://www.sixt.fr" target="_blank" rel="noopener">Sixt</a></li>
+        </ul>
       </div>
     </section>
 
@@ -229,7 +233,7 @@
       </div>
 
       <p class="liste__text">
-        Votre présence est notre plus beau cadeau. Si vous souhaitez nous gâter, voici notre liste.
+        Votre présence est le plus beau des cadeaux. Si vous souhaitez néanmoins nous faire plaisir, voici notre liste.
       </p>
       <a class="btn liste__cta" href="https://www.millemercismariage.com/juliettedimitri2027/liste.html" target="_blank" rel="noopener">Accéder à la liste →</a>
     </section>
@@ -312,6 +316,57 @@
           <!-- Bloc logistique : masqué si Présence = Non -->
           <div class="rsvp__logistics" id="rsvp-logistics">
 
+            <fieldset class="rsvp__field rsvp__fieldset">
+              <legend>Jour d'arrivée <span class="rsvp__req" aria-hidden="true">*</span></legend>
+              <label class="rsvp__radio">
+                <input type="radio" name="Arrivée" value="Veille"> Veille
+              </label>
+              <label class="rsvp__radio">
+                <input type="radio" name="Arrivée" value="Jour J"> Jour J
+              </label>
+            </fieldset>
+
+            <fieldset class="rsvp__field rsvp__fieldset">
+              <legend>Besoin de logement sur place ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
+              <label class="rsvp__radio">
+                <input type="radio" name="Logement" value="Oui"> Oui
+              </label>
+              <label class="rsvp__radio">
+                <input type="radio" name="Logement" value="Non"> Non
+              </label>
+            </fieldset>
+
+            <!-- Choix du plat principal (branche « Oui » seulement, comme tout ce bloc).
+                 Le répondant (adulte 1) choisit ici ; les adultes 2..N choisissent dans leur
+                 bloc de nom (liste déroulante générée par le JS à partir des value ci-dessous,
+                 seule source des deux libellés). Les enfants et bébés n'ont pas de choix. -->
+            <div class="rsvp__menu card">
+              <p class="rsvp__menu-title">Le menu</p>
+              <dl class="rsvp__menu-list">
+                <div>
+                  <dt>Plat principal</dt>
+                  <dd>Crevettes pochées, sauce coco-piment, risotto de petit épeautre</dd>
+                </div>
+                <div>
+                  <dt>Option végétarienne</dt>
+                  <dd>Aubergine miso, risotto de petit épeautre</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- name technique, nécessaire au groupement des radios mais retiré à l'envoi :
+                 le plat part uniquement dans le champ caché « Plats adultes ».
+                 Pas de required en dur : posé/retiré par le JS selon la branche Oui/Non. -->
+            <fieldset class="rsvp__field rsvp__fieldset rsvp__fieldset--stacked">
+              <legend>Votre plat principal <span class="rsvp__req" aria-hidden="true">*</span></legend>
+              <label class="rsvp__radio">
+                <input type="radio" name="plat-repondant" value="Crevettes pochées, risotto de petit épeautre"> Crevettes pochées, risotto de petit épeautre
+              </label>
+              <label class="rsvp__radio">
+                <input type="radio" name="plat-repondant" value="Aubergine miso, risotto de petit épeautre (végétarien)"> Aubergine miso, risotto de petit épeautre (végétarien)
+              </label>
+            </fieldset>
+
             <div class="rsvp__row rsvp__row--counts">
               <div class="rsvp__field">
                 <label for="rsvp-adults">Nombre d'adultes (vous compris) <span class="rsvp__req" aria-hidden="true">*</span></label>
@@ -348,28 +403,10 @@
               <div class="rsvp__people" id="rsvp-child-people"></div>
             </div>
 
-            <fieldset class="rsvp__field rsvp__fieldset">
-              <legend>Jour d'arrivée <span class="rsvp__req" aria-hidden="true">*</span></legend>
-              <label class="rsvp__radio">
-                <input type="radio" name="Arrivée" value="Veille"> Veille
-              </label>
-              <label class="rsvp__radio">
-                <input type="radio" name="Arrivée" value="Jour J"> Jour J
-              </label>
-            </fieldset>
-
-            <fieldset class="rsvp__field rsvp__fieldset">
-              <legend>Besoin de logement sur place ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
-              <label class="rsvp__radio">
-                <input type="radio" name="Logement" value="Oui"> Oui
-              </label>
-              <label class="rsvp__radio">
-                <input type="radio" name="Logement" value="Non"> Non
-              </label>
-            </fieldset>
-
             <div class="rsvp__field">
-              <label for="rsvp-diet">Régimes / allergies</label>
+              <!-- Libellé affiché seul modifié : le name reste « Régimes / allergies »
+                   (colonne de la Sheet + script externe, qui cassent si le name change). -->
+              <label for="rsvp-diet">Régime alimentaire / allergies</label>
               <input type="text" id="rsvp-diet" name="Régimes / allergies">
             </div>
           </div>
@@ -381,25 +418,27 @@
 
           <div class="rsvp__field">
             <label for="rsvp-message">Message pour les mariés</label>
-            <textarea id="rsvp-message" name="Message" rows="4"></textarea>
+            <textarea id="rsvp-message" name="Message" rows="4" placeholder="Un mot, une question…"></textarea>
           </div>
 
-          <!-- Deux colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
-               concaténation des noms saisis dans les blocs ci-dessus, séparés par " ; ". -->
+          <!-- Trois colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
+               concaténation des noms saisis dans les blocs ci-dessus, séparés par " ; ".
+               « Plats adultes » suit exactement l'ordre de « Noms adultes » (répondant, puis 2..N). -->
           <input type="hidden" name="Noms adultes" id="rsvp-adult-names-value">
           <input type="hidden" name="Noms enfants" id="rsvp-child-names-value">
+          <input type="hidden" name="Plats adultes" id="rsvp-adult-dishes-value">
 
           <p class="rsvp__error" id="rsvp-error" role="alert" hidden></p>
 
           <button class="btn rsvp__submit" type="submit">Envoyer ma réponse</button>
 
-          <p class="rsvp__resubmit">Une erreur ? Resoumettez le formulaire, nous garderons votre dernière réponse.</p>
+          <p class="rsvp__resubmit">Une erreur ? Renvoyez le formulaire, nous garderons votre dernière réponse.</p>
           <p class="rsvp__rgpd">Ces informations servent uniquement à l'organisation du mariage et ne seront pas partagées.</p>
         </form>
 
         <!-- Écran de confirmation (affiché après envoi réussi) -->
         <div class="rsvp__success" id="rsvp-success" hidden role="status">
-          <p class="rsvp__success-text">Merci <span id="rsvp-success-name">à vous</span>, ta réponse est bien enregistrée ✓</p>
+          <p class="rsvp__success-text">Merci <span id="rsvp-success-name">à vous</span>, votre réponse est bien enregistrée ✓</p>
         </div>
       </div>
     </section>
