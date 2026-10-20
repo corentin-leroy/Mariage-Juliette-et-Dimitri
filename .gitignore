@@ -4,3 +4,6 @@ node_modules/
 Thumbs.db
 .vscode/
 styles/main.css.map
+
+# Archive locale de la v1 (jamais versionnée ni publiée)
+archive-v1/

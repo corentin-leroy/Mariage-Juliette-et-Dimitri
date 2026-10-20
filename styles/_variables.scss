@@ -1,27 +1,32 @@
 // ─── Direction artistique — tokens ───────────────────────────────
 // Palette
-$bg:         #FAFAFA; // fond général, jamais blanc pur
-$card:       #FAF5EC; // fond des cards et encadrés
+$bg:         #F8F2E4; // fond général : crème chaud
+$card:       #FDFAF2; // fond des cartons et encadrés
 $green:      #5C7A3E; // titres de section, boutons, accents
 $green-dark: #2D4A1E; // H1, survols, éléments forts
 $sky:        #A8C8DC; // reflets ciel
 $ocre:       #C8A96E; // filets décoratifs, détails, pastilles timeline
-$stone:      #8C8A84; // texte secondaire, légendes
-$blue-pale:  #EAF3F8; // fond sections alternées
-$green-pale: #EFF5EA; // fond sections alternées
-$ink:        #1A1A1A; // corps de texte
+$stone:      #6B6860; // texte secondaire, légendes (≈ 5:1 sur $bg : AA)
+$ink:        #2A2823; // corps de texte
+$white:      #FFFFFF; // texte sur boutons pleins, halo du hero (neutre, hors palette)
+// Déclinaisons d'opacité (aucune nouvelle teinte)
+$ocre-line:  rgba($ocre, .5);  // filets secondaires (second trait des cartons, séparateurs)
 
 // Typographies (chargées via Google Fonts dans index.html)
-$font-display: 'Cormorant Garamond', serif; // prénoms, titres poétiques, jours du programme
-$font-title:   'Playfair Display', serif;   // titres de section
-$font-body:    'Lato', sans-serif;           // paragraphes, labels, formulaire
+$font-script: 'Pinyon Script', cursive;       // calligraphie : prénoms du hero UNIQUEMENT
+$font-title:  'Cormorant Garamond', serif;    // titres et voix poétique — toujours en italique
+$font-body:   'Lora', serif;                  // texte, menu, boutons, formulaire, libellés (400 à 600)
 
 // Layout
 $breakpoint-mobile: 640px;
 // Seuil propre à la nav : 6 liens + le CTA ne tiennent plus sur une ligne en dessous,
 // le menu burger prend donc le relais bien avant $breakpoint-mobile.
-$breakpoint-nav: 980px;   // mesuré : la nav horizontale casse dès 961px, marge pour la police de repli
+$breakpoint-nav: 980px;   // mesuré (Lora, écart de 18px) : la nav horizontale casse dès ~962px, marge pour la police de repli
+// Seuil propre au hero : en dessous, le bloc texte (8 lignes) ne tient plus sur l'image
+// et passe dessous, comme en mobile. Mesuré : déborde jusqu'à ~690px.
+$breakpoint-hero: 700px;
 $section-pad-desktop: 104px;
 $section-pad-mobile:  56px;
 $nav-height: 64px;          // hauteur de la nav fixe (= scroll-margin-top des sections)
 $content-max: 960px;        // largeur de lecture max du contenu
+$carton-radius: 2px;        // coins « presque droits » des cartons, cartes et cadres d'icône

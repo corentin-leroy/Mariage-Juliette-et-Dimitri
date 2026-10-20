@@ -8,9 +8,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Lora:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles/main.css">
+  <!-- ?v= : à incrémenter à chaque mise en ligne du CSS/JS, pour que les navigateurs rechargent -->
+  <link rel="stylesheet" href="styles/main.css?v=6">
 </head>
 <body>
 
@@ -57,8 +58,11 @@
         <span class="hero__monogram" aria-hidden="true"></span>
 
         <p class="hero__eyebrow">Le grand jour approche</p>
-        <h1 class="hero__names">Juliette &amp; Dimitri</h1>
-        <p class="hero__date">14 &amp; 15 juillet 2027 · Château de Faverges, Haute-Savoie</p>
+        <h1 class="hero__names">Juliette &amp;&nbsp;Dimitri</h1>
+        <!-- Date, lieu et région sur trois lignes ; les capitales viennent du CSS (text-transform) -->
+        <p class="hero__date">14 &amp; 15 juillet 2027</p>
+        <p class="hero__place">Château de Faverges</p>
+        <p class="hero__region">Haute-Savoie · France</p>
 
         <!-- Compte à rebours temps réel. La liste est aria-hidden : un aria-live qui change
              chaque seconde noierait les lecteurs d'écran. Le résumé sr-only ci-dessous prend
@@ -91,7 +95,7 @@
     </section>
 
     <!-- ═══════════ PROGRAMME ═══════════ -->
-    <section id="programme" class="section section--blue filet">
+    <section id="programme" class="section filet">
       <div class="section__head">
         <!-- PLACEHOLDER: icône aquarelle — trompette de la mort -->
         <img class="section__motif" src="assets/champignon-trompette.png" alt="" aria-hidden="true" width="56" height="56">
@@ -100,13 +104,38 @@
         <div class="section__sep" aria-hidden="true"></div>
       </div>
 
-      <!-- Programme affiché sous forme d'image (assets/programme.jpg) -->
-      <img class="programme-image" src="assets/programme.jpg"
-           alt="Programme des festivités — mercredi 14 et jeudi 15 juillet 2027">
+      <!-- Programme en texte : un bloc par jour, étapes en liste ordonnée.
+           Texte en casse normale : les capitales viennent du CSS (text-transform). -->
+      <div class="programme">
+        <div class="programme__day">
+          <h3 class="programme__date"><time datetime="2027-07-14">Mercredi 14 juillet 2027</time></h3>
+          <p class="programme__subtitle">Le jour du mariage</p>
+          <ol class="programme__steps">
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-14T15:00">15h00</time> <span class="programme__label">Cérémonie</span></li>
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-14T16:30">16h30</time> <span class="programme__label">Photos</span></li>
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-14T17:30">17h30</time> <span class="programme__label">Vin d'honneur</span></li>
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-14T20:30">20h30</time> <span class="programme__label">Dîner de réception</span></li>
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-14T22:00">22h00</time> <span class="programme__label">Soirée</span></li>
+            <!-- Après minuit : la découpe du gâteau a lieu le 15 -->
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-15T00:00">00h00</time> <span class="programme__label">Découpe du gâteau</span></li>
+          </ol>
+        </div>
+
+        <div class="programme__sep" aria-hidden="true"></div>
+
+        <div class="programme__day">
+          <h3 class="programme__date"><time datetime="2027-07-15">Jeudi 15 juillet 2027</time></h3>
+          <p class="programme__subtitle">Le lendemain</p>
+          <ol class="programme__steps">
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-15T10:00">10h00</time> <span class="programme__label">Brunch</span></li>
+            <li class="programme__step"><time class="programme__time" datetime="2027-07-15T17:00">17h00</time> <span class="programme__label">Départ</span></li>
+          </ol>
+        </div>
+      </div>
     </section>
 
     <!-- ═══════════ VENIR AU CHÂTEAU ═══════════ -->
-    <section id="venir" class="section section--green filet">
+    <section id="venir" class="section filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — cèpe -->
         <img class="section__motif" src="assets/champignon-cepe.png" alt="" aria-hidden="true" width="56" height="56">
@@ -198,7 +227,7 @@
     </section>
 
     <!-- ═══════════ LOGEMENT ═══════════ -->
-    <section id="logement" class="section section--blue filet">
+    <section id="logement" class="section filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — girolle -->
         <img class="section__motif" src="assets/champignon-girolle.png" alt="" aria-hidden="true" width="56" height="56">
@@ -223,23 +252,26 @@
     </section>
 
     <!-- ═══════════ LISTE DE MARIAGE ═══════════ -->
-    <section id="liste" class="section section--green filet">
+    <section id="liste" class="section section--short filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — trompette de la mort -->
         <img class="section__motif" src="assets/champignon-trompette.png" alt="" aria-hidden="true" width="56" height="56">
-        <p class="eyebrow">Nous gâter</p>
+        <p class="eyebrow">Nous faire plaisir</p>
         <h2>Liste de mariage</h2>
         <div class="section__sep" aria-hidden="true"></div>
       </div>
 
-      <p class="liste__text">
-        Votre présence est le plus beau des cadeaux. Si vous souhaitez néanmoins nous faire plaisir, voici notre liste.
-      </p>
-      <a class="btn liste__cta" href="https://www.millemercismariage.com/juliettedimitri2027/liste.html" target="_blank" rel="noopener">Accéder à la liste →</a>
+      <!-- Conteneur purement visuel (petit carton à double filet) -->
+      <div class="liste__carton">
+        <p class="liste__text">
+          Votre présence est le plus beau des cadeaux. Si vous souhaitez néanmoins nous faire plaisir, voici notre liste.
+        </p>
+        <a class="btn liste__cta" href="https://www.millemercismariage.com/juliettedimitri2027/liste.html" target="_blank" rel="noopener">Accéder à la liste →</a>
+      </div>
     </section>
 
     <!-- ═══════════ CONTACT ═══════════ -->
-    <section id="contact" class="section section--blue filet">
+    <section id="contact" class="section section--short filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — cèpe -->
         <img class="section__motif" src="assets/champignon-cepe.png" alt="" aria-hidden="true" width="56" height="56">
@@ -248,32 +280,35 @@
         <div class="section__sep" aria-hidden="true"></div>
       </div>
 
-      <p class="contact__text">Pour toute question, contactez-nous directement.</p>
+      <!-- Conteneur purement visuel (petit carton à double filet) -->
+      <div class="contact__carton">
+        <p class="contact__text">Pour toute question, contactez-nous directement.</p>
 
-      <!-- L'adresse email est volontairement absente du HTML (anti-récolte par les bots) :
-           elle est reconstruite par morceaux au chargement dans scripts/main.js (initContact),
-           qui pose le href mailto du bouton et remplit le bloc adresse ci-dessous.
-           href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page.
-           Le bouton mailto est réservé au mobile (masqué au-delà de 640px) : sur ordinateur,
-           beaucoup d'invités n'ont aucun client mail configuré et le lien n'aboutirait pas. -->
-      <a class="btn contact__cta is-pending" id="contact-cta" href="#contact" aria-disabled="true">Nous écrire</a>
+        <!-- L'adresse email est volontairement absente du HTML (anti-récolte par les bots) :
+             elle est reconstruite par morceaux au chargement dans scripts/main.js (initContact),
+             qui pose le href mailto du bouton et remplit le bloc adresse ci-dessous.
+             href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page.
+             Le bouton mailto est réservé au mobile (masqué au-delà de 640px) : sur ordinateur,
+             beaucoup d'invités n'ont aucun client mail configuré et le lien n'aboutirait pas. -->
+        <a class="btn contact__cta is-pending" id="contact-cta" href="#contact" aria-disabled="true">Nous écrire</a>
 
-      <p class="contact__fallback" id="contact-fallback" hidden>
-        <span class="contact__lead contact__lead--desktop">Écrivez-nous à :</span>
-        <span class="contact__lead contact__lead--mobile">ou écrivez-nous à :</span>
-        <span class="contact__mail" id="contact-mail"></span>
-      </p>
-
-      <noscript>
-        <p class="contact__fallback">
-          Notre adresse email s’affiche ici une fois JavaScript activé : activez-le puis rechargez la page.
-          Sinon, laissez-nous un mot dans le <a href="#rsvp">formulaire de réponse</a> — nous vous recontacterons.
+        <p class="contact__fallback" id="contact-fallback" hidden>
+          <span class="contact__lead contact__lead--desktop">Écrivez-nous à :</span>
+          <span class="contact__lead contact__lead--mobile">ou écrivez-nous à :</span>
+          <span class="contact__mail" id="contact-mail"></span>
         </p>
-      </noscript>
+
+        <noscript>
+          <p class="contact__fallback">
+            Notre adresse email s’affiche ici une fois JavaScript activé : activez-le puis rechargez la page.
+            Sinon, laissez-nous un mot dans le <a href="#rsvp">formulaire de réponse</a> — nous vous recontacterons.
+          </p>
+        </noscript>
+      </div>
     </section>
 
     <!-- ═══════════ RSVP ═══════════ -->
-    <section id="rsvp" class="section section--green filet">
+    <section id="rsvp" class="section filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — girolle -->
         <img class="section__motif" src="assets/champignon-girolle.png" alt="" aria-hidden="true" width="56" height="56">
@@ -303,37 +338,46 @@
             </div>
           </div>
 
-          <fieldset class="rsvp__field rsvp__fieldset">
+          <!-- Choix courts en boutons : le radio reste dans le DOM, masqué en sr-only
+               (jamais display:none — main.js écoute ses change et pose/retire les required),
+               le span voisin porte l'apparence, l'état coché et l'anneau de focus. -->
+          <fieldset class="rsvp__field rsvp__fieldset rsvp__fieldset--choices">
             <legend>Serez-vous présent(e) ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
-            <label class="rsvp__radio">
-              <input type="radio" name="Présence" value="Oui" required> Oui
-            </label>
-            <label class="rsvp__radio">
-              <input type="radio" name="Présence" value="Non" required> Non
-            </label>
+            <div class="rsvp__choices">
+              <label class="rsvp__radio rsvp__choice">
+                <input class="sr-only" type="radio" name="Présence" value="Oui" required><span class="rsvp__choice-label">Oui</span>
+              </label>
+              <label class="rsvp__radio rsvp__choice">
+                <input class="sr-only" type="radio" name="Présence" value="Non" required><span class="rsvp__choice-label">Non</span>
+              </label>
+            </div>
           </fieldset>
 
           <!-- Bloc logistique : masqué si Présence = Non -->
           <div class="rsvp__logistics" id="rsvp-logistics">
 
-            <fieldset class="rsvp__field rsvp__fieldset">
+            <fieldset class="rsvp__field rsvp__fieldset rsvp__fieldset--choices">
               <legend>Jour d'arrivée <span class="rsvp__req" aria-hidden="true">*</span></legend>
-              <label class="rsvp__radio">
-                <input type="radio" name="Arrivée" value="Veille"> Veille
-              </label>
-              <label class="rsvp__radio">
-                <input type="radio" name="Arrivée" value="Jour J"> Jour J
-              </label>
+              <div class="rsvp__choices">
+                <label class="rsvp__radio rsvp__choice">
+                  <input class="sr-only" type="radio" name="Arrivée" value="Veille"><span class="rsvp__choice-label">Veille</span>
+                </label>
+                <label class="rsvp__radio rsvp__choice">
+                  <input class="sr-only" type="radio" name="Arrivée" value="Jour J"><span class="rsvp__choice-label">Jour J</span>
+                </label>
+              </div>
             </fieldset>
 
-            <fieldset class="rsvp__field rsvp__fieldset">
+            <fieldset class="rsvp__field rsvp__fieldset rsvp__fieldset--choices">
               <legend>Besoin de logement sur place ? <span class="rsvp__req" aria-hidden="true">*</span></legend>
-              <label class="rsvp__radio">
-                <input type="radio" name="Logement" value="Oui"> Oui
-              </label>
-              <label class="rsvp__radio">
-                <input type="radio" name="Logement" value="Non"> Non
-              </label>
+              <div class="rsvp__choices">
+                <label class="rsvp__radio rsvp__choice">
+                  <input class="sr-only" type="radio" name="Logement" value="Oui"><span class="rsvp__choice-label">Oui</span>
+                </label>
+                <label class="rsvp__radio rsvp__choice">
+                  <input class="sr-only" type="radio" name="Logement" value="Non"><span class="rsvp__choice-label">Non</span>
+                </label>
+              </div>
             </fieldset>
 
             <!-- Choix du plat principal (branche « Oui » seulement, comme tout ce bloc).
@@ -349,7 +393,7 @@
                 </div>
                 <div>
                   <dt>Option végétarienne</dt>
-                  <dd>Aubergine miso, risotto de petit épeautre</dd>
+                  <dd>Aubergine, sauce miso, risotto de petit épeautre</dd>
                 </div>
               </dl>
             </div>
@@ -363,7 +407,7 @@
                 <input type="radio" name="plat-repondant" value="Crevettes pochées, risotto de petit épeautre"> Crevettes pochées, risotto de petit épeautre
               </label>
               <label class="rsvp__radio">
-                <input type="radio" name="plat-repondant" value="Aubergine miso, risotto de petit épeautre (végétarien)"> Aubergine miso, risotto de petit épeautre (végétarien)
+                <input type="radio" name="plat-repondant" value="Aubergine, sauce miso, risotto de petit épeautre (végétarien)"> Aubergine, sauce miso, risotto de petit épeautre (végétarien)
               </label>
             </fieldset>
 
@@ -411,14 +455,18 @@
             </div>
           </div>
 
-          <div class="rsvp__field">
-            <label for="rsvp-email">Email de contact <span class="rsvp__req" id="rsvp-email-req" aria-hidden="true">*</span></label>
-            <input type="email" id="rsvp-email" name="Email" autocomplete="email" required>
-          </div>
+          <!-- Groupe « contact » : porte le filet de séparation, visible aussi sur la
+               branche « Non » où le bloc logistique au-dessus est masqué. -->
+          <div class="rsvp__group rsvp__group--contact">
+            <div class="rsvp__field">
+              <label for="rsvp-email">Email de contact <span class="rsvp__req" id="rsvp-email-req" aria-hidden="true">*</span></label>
+              <input type="email" id="rsvp-email" name="Email" autocomplete="email" required>
+            </div>
 
-          <div class="rsvp__field">
-            <label for="rsvp-message">Message pour les mariés</label>
-            <textarea id="rsvp-message" name="Message" rows="4" placeholder="Un mot, une question…"></textarea>
+            <div class="rsvp__field">
+              <label for="rsvp-message">Message pour les mariés</label>
+              <textarea id="rsvp-message" name="Message" rows="4" placeholder="Un mot, une question…"></textarea>
+            </div>
           </div>
 
           <!-- Trois colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
@@ -450,6 +498,6 @@
     <p class="footer__date">14-15 juillet 2027</p>
   </footer>
 
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js?v=3"></script>
 </body>
 </html>

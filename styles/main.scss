@@ -1,5 +1,29 @@
 @use 'variables' as *;
 @use 'sass:color';
+@use 'sass:string';
+
+// Tokens de DA (couleurs, polices, $ocre-line, $carton-radius…) : voir _variables.scss
+
+// $ocre sans le « # », encodé pour les SVG en data-URI (le « # » s'y écrit %23)
+$ocre-svg: '%23' + string.slice(color.ie-hex-str($ocre), 4);
+
+// ─── Réglages de mise en page ─────────────────────────────────────
+// Hero mobile : de combien le bloc texte remonte sur le bas de l'aquarelle (valeur négative).
+// Mettre 0 pour désactiver le chevauchement : le texte démarre alors sous l'image.
+$hero-overlap-mobile: -32px;
+
+// Fleuron champignon (même dessin que celui des .section__sep), réutilisé dans le footer
+$fleuron-svg: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='#{$ocre-svg}'%3E%3Cpath%20d='M12%204c-4.4%200-8%202.7-8%206%200%20.6.5%201%201.1%201h13.8c.6%200%201.1-.4%201.1-1%200-3.3-3.6-6-8-6z'/%3E%3Cpath%20d='M9.5%2011h5v6.2c0%201-.9%201.8-2%201.8h-1c-1.1%200-2-.8-2-1.8V11z'/%3E%3C/svg%3E");
+
+// Carton de papeterie, commun au RSVP, au logement, à la liste et au
+// contact : feuille crème, filet ocre, second trait en retrait de $inset. Le box-shadow
+// inset dessine ce second trait (une ligne, pas une ombre portée) ; coins presque droits.
+@mixin carton($inset: 6px) {
+  background: $card;
+  border: 1px solid $ocre;
+  border-radius: $carton-radius;
+  box-shadow: inset 0 0 0 $inset $card, inset 0 0 0 ($inset + 1) $ocre-line;
+}
 
 // ─── Reset léger ──────────────────────────────────────────────────
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +43,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2 { font-family: $font-title; font-weight: 600; color: $green-dark; }
+// Titres : Cormorant Garamond italique 600 (seule exception : les prénoms du hero, en script)
+h1, h2, h3 { font-family: $font-title; font-style: italic; font-weight: 600; color: $green-dark; }
+
+// Lora n'est chargée qu'en 400-600 : le gras par défaut du navigateur (700) serait synthétisé
+b, strong { font-weight: 600; }
 
 a { color: $green; }
 
@@ -27,7 +55,7 @@ a { color: $green; }
 .btn {
   display: inline-block;
   background: $green;
-  color: #fff;
+  color: $white;
   font-family: $font-body;
   padding: 12px 24px;
   border-radius: 3px;
@@ -36,8 +64,9 @@ a { color: $green; }
   &:hover { background: $green-dark; }
 }
 
-// Filet décoratif ocre (à appliquer en haut/bas des sections colorées)
-.filet { border-top: 1px solid $ocre; border-bottom: 1px solid $ocre; }
+// Filet ocre de jonction, en haut de chaque section : sur le fond crème unique, c'est lui
+// qui sépare les sections. Un seul trait par jonction (le footer porte le sien, le hero aucun).
+.filet { border-top: 1px solid $ocre; }
 
 // Base de section
 .section {
@@ -51,7 +80,6 @@ a { color: $green; }
   * { animation: none !important; transition: none !important; }
 }
 
-h3 { font-family: $font-title; font-weight: 600; color: $green-dark; }
 
 // Variante secondaire du bouton (liens de location de voiture)
 .btn--ghost {
@@ -59,7 +87,7 @@ h3 { font-family: $font-title; font-weight: 600; color: $green-dark; }
   color: $green;
   border: 1px solid $ocre;
   padding: 10px 20px;
-  &:hover { background: $green; color: #fff; border-color: $green; }
+  &:hover { background: $green; color: $white; border-color: $green; }
 }
 
 // Utilitaire lecteur d'écran (contenu visuellement masqué mais lisible AT)
@@ -94,7 +122,7 @@ section[id] { scroll-margin-top: $nav-height; }
   justify-content: space-between;
   gap: 16px;
   padding: 0 24px;
-  background: rgba(250, 250, 250, .92);          // $bg translucide, jamais blanc pur
+  background: rgba($bg, .92);                    // $bg translucide
   backdrop-filter: blur(6px);
   border-bottom: 1px solid $ocre;
 }
@@ -107,11 +135,12 @@ section[id] { scroll-margin-top: $nav-height; }
 
 // Le PNG (noir sur fond transparent) sert de masque : la couleur vient du background,
 // donc la teinte suit exactement $green-dark comme le reste de la nav.
-// 38 × 40px = ratio natif 466/487, calé sur la nav de $nav-height (64px).
+// 44 × 46px = ratio natif 466/487 : assez grand pour que le trait fin du monogramme
+// reste lisible, avec 9px d'air en haut et en bas dans la nav de 64px.
 .nav__brand-mark {
   display: block;
-  width: 38px;
-  height: 40px;
+  width: 44px;
+  height: 46px;
   background-color: $green-dark;
   -webkit-mask: url("../assets/monogramme.png") no-repeat center / contain;
   mask: url("../assets/monogramme.png") no-repeat center / contain;
@@ -120,7 +149,7 @@ section[id] { scroll-margin-top: $nav-height; }
 .nav__menu {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 18px;                 // 18px : avec Lora, la nav tient sur une ligne jusqu’à ~962px (< $breakpoint-nav)
   list-style: none;
 }
 
@@ -139,16 +168,16 @@ section[id] { scroll-margin-top: $nav-height; }
 
 // Le CTA RSVP reste un bouton même dans la nav
 .nav__cta {
-  color: #fff;
+  color: $white;
   padding: 8px 18px;
   white-space: nowrap;              // le libellé du CTA ne se coupe jamais en deux
-  &:hover { color: #fff; }
+  &:hover { color: $white; }
   // L'état actif d'un lien de nav (recolorer le texte) n'a pas de sens sur un bouton :
   // .nav__link.is-active (2 classes) l'emportait sur .nav__cta (1 classe) et repeignait
   // le libellé en $green-dark sur le fond $green — 2:1 de contraste, illisible.
   // On garde le libellé blanc et on signale l'état par le fond foncé, comme au survol.
   &.is-active {
-    color: #fff;
+    color: $white;
     background: $green-dark;
     border-bottom-color: transparent;
   }
@@ -188,7 +217,7 @@ section[id] { scroll-margin-top: $nav-height; }
     align-items: stretch;
     gap: 0;
     padding: 10px 24px 23px;                   // +15% d'air haut/bas, cohérent avec les items
-    background: rgba(250, 250, 250, .98);
+    background: rgba($bg, .98);
     border-bottom: 1px solid $ocre;
     transform: translateY(-8px);
     opacity: 0;
@@ -229,8 +258,6 @@ section[id] { scroll-margin-top: $nav-height; }
 
 // ─── En-tête de section réutilisable ──────────────────────────────
 .section { scroll-margin-top: $nav-height; }
-.section--blue  { background: $blue-pale; }
-.section--green { background: $green-pale; }
 
 .section__head {
   max-width: $content-max;
@@ -240,12 +267,13 @@ section[id] { scroll-margin-top: $nav-height; }
 // Motif nu du champignon, uniforme sur toutes les sections (format du trompette #programme)
 .section__motif {
   display: block;
-  width: 56px; height: auto;
+  width: 84px; height: auto;   // 84px : l'aquarelle reste lisible (sources ~600px)
   margin: 0 auto 12px;
   opacity: .9;
 }
 
-.section__head h2 { font-size: clamp(2rem, 4.5vw, 2.8rem); }
+// Cormorant a un petit œil : titres agrandis pour garder leur présence
+.section__head h2 { font-size: clamp(2.3rem, 5.2vw, 3.2rem); line-height: 1.15; }
 
 // Filet à fleuron : deux traits ocre encadrant un champignon miniature (SVG data-URI)
 .section__sep {
@@ -255,7 +283,7 @@ section[id] { scroll-margin-top: $nav-height; }
   width: 340px;
   max-width: 80%;
   margin: 18px auto 0;
-  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='%23C8A96E'%3E%3Cpath%20d='M12%204c-4.4%200-8%202.7-8%206%200%20.6.5%201%201.1%201h13.8c.6%200%201.1-.4%201.1-1%200-3.3-3.6-6-8-6z'/%3E%3Cpath%20d='M9.5%2011h5v6.2c0%201-.9%201.8-2%201.8h-1c-1.1%200-2-.8-2-1.8V11z'/%3E%3C/svg%3E") center / 22px 22px no-repeat;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='#{$ocre-svg}'%3E%3Cpath%20d='M12%204c-4.4%200-8%202.7-8%206%200%20.6.5%201%201.1%201h13.8c.6%200%201.1-.4%201.1-1%200-3.3-3.6-6-8-6z'/%3E%3Cpath%20d='M9.5%2011h5v6.2c0%201-.9%201.8-2%201.8h-1c-1.1%200-2-.8-2-1.8V11z'/%3E%3C/svg%3E") center / 22px 22px no-repeat;
 }
 .section__sep::before,
 .section__sep::after {
@@ -267,7 +295,7 @@ section[id] { scroll-margin-top: $nav-height; }
 
 .eyebrow {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: .72rem;
@@ -283,9 +311,12 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 
 // ─── HERO (#mariage) ──────────────────────────────────────────────
+// Lignes de texte du hero qui portent le halo (desktop) et le perdent sur fond uni (mobile)
+$hero-lines: '.hero__eyebrow, .hero__names, .hero__date, .hero__place, .hero__region, .hero__countdown';
+
 // L'image donne sa hauteur au hero et s'affiche EN ENTIER (aucun ratio codé en dur)
-// border-bottom : cumulé au border-top de #programme, le trait de jonction fait 2px comme ailleurs
-.hero { position: relative; border-bottom: 1px solid $ocre; }
+// Pas de filet en bas : la jonction avec #programme est assurée par le filet du haut de celui-ci
+.hero { position: relative; }
 
 .hero__media { position: relative; display: block; }
 .hero__img {
@@ -294,12 +325,12 @@ section[id] { scroll-margin-top: $nav-height; }
   height: auto;
   background: $sky; // teinte de repli le temps du chargement
 }
-// Fondu du bas de l'image vers la section suivante (#programme = $blue-pale)
+// Fondu du bas de l'image vers le fond crème de la page
 .hero__fade {
   position: absolute;
   left: 0; right: 0; bottom: 0;
   height: clamp(50px, 10vw, 150px);
-  background: linear-gradient(to bottom, rgba($blue-pale, 0), $blue-pale);
+  background: linear-gradient(to bottom, rgba($bg, 0), $bg);
   pointer-events: none;
 }
 
@@ -310,25 +341,19 @@ section[id] { scroll-margin-top: $nav-height; }
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
-  width: min(640px, 90%);
+  width: min(760px, 90%);                // assez large pour les prénoms en une ligne
   text-align: center;
 
   // OPTION B (défaut) : halo clair, sans bande. Lisibilité assurée par text-shadow blanc doux.
-  .hero__eyebrow,
-  .hero__names,
-  .hero__date,
-  .hero__countdown { text-shadow: 0 1px 10px rgba(255, 255, 255, .9); }
+  #{$hero-lines} { text-shadow: 0 1px 10px rgba($white, .9); }
 }
 
 // OPTION A (repli) : bande crème translucide. Ajouter `hero__panel--card` sur .hero__panel.
 .hero__panel--card {
-  background: rgba(250, 245, 236, .80);
+  background: rgba($card, .8);
   border-radius: 5px;
   padding: 32px 40px;
-  .hero__eyebrow,
-  .hero__names,
-  .hero__date,
-  .hero__countdown { text-shadow: none; }
+  #{$hero-lines} { text-shadow: none; }
 }
 
 // Même principe que .nav__brand-mark : le PNG sert de masque, la teinte vient du
@@ -342,36 +367,62 @@ section[id] { scroll-margin-top: $nav-height; }
   -webkit-mask: url("../assets/monogramme.png") no-repeat center / contain;
   mask: url("../assets/monogramme.png") no-repeat center / contain;
 }
+// Bloc texte, centré, dans cet ordre : sur-titre / prénoms / date / lieu / région /
+// compte à rebours / bouton. Trois voix : Lora en capitales espacées pour les repères,
+// Pinyon Script pour les prénoms (seul usage calligraphique du site), Cormorant pour le lieu.
 .hero__eyebrow {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: .78rem;
   color: $green-dark;
   margin-bottom: 10px;
 }
+// Pinyon Script n'existe qu'en 400 romain : on neutralise le 600 italique hérité des titres
+// (sinon faux gras et fausse italique). Œil petit et capitales à grand panache : taille
+// généreuse et interligne ouvert pour que les boucles ne soient pas rognées.
 .hero__names {
-  font-family: $font-display;
-  font-style: italic;
-  font-weight: 600;
+  font-family: $font-script;
+  font-style: normal;
+  font-weight: 400;
   color: $green-dark;
-  font-size: clamp(3rem, 11vw, 6rem);
-  line-height: 1.05;
-  margin-bottom: 14px;
+  font-size: clamp(3.4rem, 8vw, 6.4rem);  // largeur du nom ≈ 6,5 × la taille : une ligne en desktop
+  line-height: 1.2;
+  margin-bottom: 12px;
 }
 .hero__date {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: clamp(.72rem, 2.4vw, .9rem);
   color: $ink;
-  margin-bottom: 18px;
+  margin-bottom: 4px;
 }
-// Compte à rebours : 4 unités en ligne, le nombre au-dessus de son libellé.
+// Le lieu, nettement plus grand que la date : c'est l'information qu'on retient
+.hero__place {
+  font-family: $font-title;
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4.6vw, 2.2rem);
+  line-height: 1.2;
+  color: $green-dark;
+  margin-bottom: 6px;
+}
+.hero__region {
+  font-family: $font-body;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: clamp(.62rem, 2vw, .72rem);   // plus petit que la date
+  color: $ink;
+  margin-bottom: 20px;
+}
+// Compte à rebours : 4 blocs côte à côte, sans séparateur, le nombre (Cormorant italique,
+// grand) au-dessus de son libellé (Lora 600, petites capitales espacées, $stone).
 // La classe .hero__countdown est conservée : c'est le point d'accroche du text-shadow du hero.
-.hero__countdown { margin-bottom: 24px; }
+.hero__countdown { margin-bottom: 26px; }
 
 .countdown {
   display: flex;
@@ -382,10 +433,10 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 .countdown__unit { display: flex; flex-direction: column; align-items: center; }
 .countdown__value {
-  font-family: $font-display;
+  font-family: $font-title;
   font-style: italic;
   font-weight: 600;
-  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  font-size: clamp(2.2rem, 7vw, 3rem);
   line-height: 1.1;
   color: $green-dark;
   // Double garantie anti-tremblement : chiffres à chasse fixe si la police les fournit,
@@ -398,15 +449,18 @@ section[id] { scroll-margin-top: $nav-height; }
 .countdown__unit--days .countdown__value { min-width: 3.5ch; } // jusqu'à 3 chiffres
 .countdown__label {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   font-size: clamp(.58rem, 1.9vw, .72rem);
   color: $stone;
   margin-top: 6px;
 }
+// Dans le hero, sur le ciel de l'aquarelle : $stone ne tenait qu'à l'aide du halo.
+// Seule la couleur change ; taille, graisse, espacement et halo restent ceux de .countdown__label.
+.hero__countdown .countdown__label { color: $green-dark; }
 .countdown__final {
-  font-family: $font-display;
+  font-family: $font-title;
   font-style: italic;
   font-weight: 600;
   font-size: clamp(1.9rem, 6vw, 2.6rem);
@@ -417,43 +471,166 @@ section[id] { scroll-margin-top: $nav-height; }
   .countdown__unit--minutes,
   .countdown__unit--seconds { display: none; }
 }
-.hero__cta { font-size: 1rem; }
+// Bouton du hero seul en capitales espacées (les autres boutons gardent leur casse)
+.hero__cta {
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+}
 
-@media (max-width: $breakpoint-mobile) {
+@media (max-width: $breakpoint-hero) {      // hero empilé : voir $breakpoint-hero
   // Image en bandeau, puis bloc texte EN DESSOUS (plus de superposition)
   .hero__panel {
     position: static;
     transform: none;
     width: auto;
-    background: $green-pale;
+    background: $bg;
     padding: 32px 20px 40px;
 
     // Fond clair : on retire le halo
-    .hero__eyebrow,
-    .hero__names,
-    .hero__date,
-    .hero__countdown { text-shadow: none; }
+    #{$hero-lines} { text-shadow: none; }
   }
   // Le bas de l'image se fond vers le fond du bloc texte
-  .hero__fade { background: linear-gradient(to bottom, rgba($green-pale, 0), $green-pale); }
+  .hero__fade { background: linear-gradient(to bottom, rgba($bg, 0), $bg); }
+
+  // Le CTA « Confirmer ma présence » doit apparaître sans défiler sur un téléphone.
+  // L'image (entière, ~323px à 375px) n'est pas négociable : on resserre le bloc texte.
+  // - il remonte de $hero-overlap-mobile dans le fondu bas de l'image (réglable, 0 = off) ;
+  // - monogramme réduit à 84px (88px de haut, ratio natif 466/487) ;
+  // - marges entre les lignes resserrées.
+  .hero__panel {
+    position: relative;          // passe au-dessus du fondu (.hero__fade, absolu)
+    left: auto;                  // annule le left: 50% du desktop, réactivé par position: relative
+    z-index: 1;
+    margin-top: $hero-overlap-mobile;
+    padding: 0 20px 32px;
+    background: transparent;     // le fondu assure la jonction, le fond vient du .hero ci-dessous
+  }
+  .hero { background: $bg; }
+  .hero__monogram { width: 84px; height: 88px; margin-bottom: 10px; }
+  .hero__eyebrow { margin-bottom: 4px; }
+  .hero__names { margin-bottom: 6px; }
+  .hero__region { margin-bottom: 14px; }
+  .hero__countdown { margin-bottom: 16px; }
 }
 
-// ─── PROGRAMME (#programme) — image ───────────────────────────────
-.programme-image {
-  display: block;
-  width: 100%;
-  max-width: $content-max;
+// ─── PROGRAMME (#programme) ───────────────────────────────────────
+// Une seule colonne centrée, IDENTIQUE en desktop et en mobile (aucune media query).
+// Chaque étape est une grille horaire | rail | intitulé : colonnes horaire et rail de
+// largeur fixe, donc pastilles et traits tombent sur le même axe pour les deux jours.
+$prog-width:    20rem;   // = contenu (horaire + rail + intitulé le plus long) + marges égales : groupe centré
+$prog-time-col: 4.2rem;  // colonne horaire, largeur fixe (« 00h00 » aligné à droite)
+$prog-rail-col: 2.6rem;  // colonne du trait vertical et des pastilles
+$prog-line:     1.6rem;  // hauteur de la 1re ligne d'une étape : la pastille se centre dessus
+$prog-gap:      1.1rem;  // espacement régulier entre les étapes
+$prog-dot:      .55rem;  // diamètre des pastilles
+$prog-axis:     $prog-time-col + $prog-rail-col * .5; // abscisse du trait et des pastilles
+
+.programme {
+  max-width: $prog-width;
   margin: 0 auto;
-  border-radius: 5px;
+}
+.programme__day { text-align: center; }
+// Date du jour : un h3 (sous « Le programme ») qui quitte le style Cormorant des titres
+.programme__date {
+  font-family: $font-body;
+  font-style: normal;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: $stone;
+}
+.programme__subtitle {
+  font-family: $font-title;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: $stone;
+  margin-bottom: 1.6rem;
+}
+.programme__steps {
+  list-style: none;
+  text-align: left;
+}
+// Horaire et intitulé partagent taille et hauteur de ligne : mêmes lignes de base,
+// et la pastille, centrée sur cette première ligne, est alignée sur les deux.
+.programme__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: $prog-time-col $prog-rail-col 1fr;
+  align-items: start;
+  font-size: .88rem;
+  line-height: $prog-line;
+  & + & { margin-top: $prog-gap; }
+
+  // Pastille, sur l'axe, centrée sur la première ligne
+  &::before {
+    content: '';
+    position: absolute;
+    left: $prog-axis - $prog-dot * .5;
+    top: ($prog-line - $prog-dot) * .5;
+    width: $prog-dot;
+    height: $prog-dot;
+    border-radius: 50%;
+    background: $ocre;
+  }
+  // Trait : de cette pastille jusqu'à la suivante (hauteur de l'étape + espacement).
+  // Aucun après la dernière étape : il relie la 1re pastille à la dernière, sans dépasser,
+  // même si un intitulé passe sur deux lignes.
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(#{$prog-axis} - .5px);
+    top: $prog-line * .5;
+    width: 1px;
+    height: calc(100% + #{$prog-gap});
+    background: $ocre;
+  }
+}
+.programme__time {
+  grid-column: 1;
+  text-align: right;
+  font-family: $font-body;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: $ocre;
+}
+// Toujours en 3e colonne : un intitulé qui passe à la ligne reste à droite du trait
+.programme__label {
+  grid-column: 3;
+  font-family: $font-body;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $ink;
+}
+// Court filet ocre entre les deux jours, plus d'air autour qu'entre les étapes
+.programme__sep {
+  width: 4rem;
+  height: 1px;
+  margin: 2.8rem auto;
+  background: $ocre;
 }
 
 // ─── VENIR (#venir) ───────────────────────────────────────────────
+// L'adresse en cartouche — filets ocre dessus/dessous, largeur calée sur le texte —
+// pour qu'elle se repère comme l'information de référence de la section.
 .venir__address {
-  max-width: $content-max;
-  margin: 0 auto 32px;
+  width: fit-content;
+  max-width: min(100%, $content-max);
+  margin: 0 auto 40px;
+  padding: 14px 28px;
+  border-top: 1px solid $ocre;
+  border-bottom: 1px solid $ocre;
+  line-height: 1.45;
   text-align: center;
-  font-family: $font-display;
+  @media (max-width: $breakpoint-mobile) { padding: 12px 6px; font-size: 1.2rem; }
+  font-family: $font-title;
   font-style: italic;
+  font-weight: 600;
   font-size: 1.3rem;
   color: $green-dark;
 }
@@ -472,9 +649,9 @@ section[id] { scroll-margin-top: $nav-height; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: color.mix(#fff, $card, 50%);
+  background: color.mix($white, $card, 50%);
   border: 1px solid rgba($ocre, .55);
-  border-radius: 12px;
+  border-radius: $carton-radius;      // mêmes coins que les cartons
   padding: 28px;
 }
 
@@ -486,7 +663,7 @@ section[id] { scroll-margin-top: $nav-height; }
   margin-bottom: 16px;
   background: $card;
   border: 1px solid $ocre;
-  border-radius: 10px;
+  border-radius: $carton-radius;      // mêmes coins que les cartons
 }
 .venir__mode-icon-inner {
   display: flex;
@@ -495,7 +672,7 @@ section[id] { scroll-margin-top: $nav-height; }
   width: 100%;
   height: 100%;
   border: 1px solid rgba($ocre, .5);
-  border-radius: 6px;
+  border-radius: $carton-radius;      // mêmes coins que les cartons
 }
 .venir__mode-icon svg {
   display: block;
@@ -504,20 +681,20 @@ section[id] { scroll-margin-top: $nav-height; }
   color: $green; // stroke via currentColor
 }
 
-.venir__mode-title { font-size: 1.3rem; margin-bottom: 8px; }
+.venir__mode-title { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; } // Cormorant : +20 % pour l’œil
 .venir__mode-text { color: $ink; }
-.venir__mode-time { color: $green; font-weight: 700; }
-.venir__mode-gps { font-family: $font-display; font-style: italic; color: $stone; }
+.venir__mode-time { color: $green; font-weight: 600; }
+.venir__mode-gps { font-family: $font-title; font-style: italic; font-weight: 600; color: $stone; }
 .venir__map {
   max-width: $content-max;
   margin: 0 auto 40px;
   border-radius: 5px;
   overflow: hidden;
   border: 1px solid $ocre;
-  iframe { display: block; width: 100%; height: 600px; border: 0; }
+  iframe { display: block; width: 100%; height: 440px; border: 0; }
 }
 .venir__rental { max-width: $content-max; margin: 0 auto; text-align: center; }
-.venir__rental-title { font-size: 1.3rem; margin-bottom: 8px; }
+.venir__rental-title { font-size: 1.55rem; line-height: 1.25; margin-bottom: 8px; }
 // Liste unique de marques : les mêmes agences servent Annecy et l'aéroport de Genève
 .venir__rental-note { color: $stone; margin-bottom: 20px; }
 .venir__rental-links {
@@ -534,15 +711,49 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 
 // ─── LOGEMENT (#logement) ─────────────────────────────────────────
-.logement__intro { max-width: 680px; margin: 0 auto 20px; text-align: center; }
+// L'intro, centrée, chapeaute un carton centré de même largeur ; la liste est alignée
+// à gauche dans le carton, comme un texte sur une fiche.
+.logement__intro { max-width: 680px; margin: 0 auto 28px; text-align: center; }
 .logement__infos {
   max-width: 680px;           // même colonne centrale que .logement__intro
   margin: 0 auto;             // dernier bloc de la section : le padding de section suffit
-  padding-left: 22px;         // les puces et le texte restent alignés à gauche dans le conteneur
-  li { margin-bottom: 6px; }
+  padding: 32px 40px 32px 58px; // 58px à gauche = 40px + gouttière des puces
+  @include carton;
+  li { margin-bottom: 8px; padding-left: 4px; }
+  li:last-child { margin-bottom: 0; }
+  // Puces natives teintées : list-style conservé, la liste reste annoncée comme telle
+  // par les lecteurs d'écran (un list-style: none la fait disparaître sous Safari).
+  li::marker { color: $ocre; font-size: 1.15em; }
+  @media (max-width: $breakpoint-mobile) {
+    padding: 24px 20px 24px 38px;
+    @include carton(5px);
+  }
 }
 
 // ─── LISTE (#liste) & CONTACT (#contact) ──────────────────────────
+// Sections courtes (deux phrases) : padding vertical réduit pour ne pas laisser
+// une grande bande vide. Déclaré après .section : l'emporte aussi sur sa règle mobile,
+// d'où la valeur mobile réaffirmée ici.
+.section--short {
+  padding-top: 72px;
+  padding-bottom: 72px;
+  @media (max-width: $breakpoint-mobile) { padding-top: 48px; padding-bottom: 48px; }
+}
+
+// Petit carton à double filet, identique pour la liste et le contact
+.liste__carton,
+.contact__carton {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 44px;
+  text-align: center;
+  @include carton;
+  @media (max-width: $breakpoint-mobile) {
+    padding: 30px 20px;
+    @include carton(5px);
+  }
+}
+
 .liste__text,
 .contact__text {
   max-width: 640px;
@@ -550,6 +761,17 @@ section[id] { scroll-margin-top: $nav-height; }
   text-align: center;
   font-size: 1.1rem;
 }
+// La phrase de la liste est le cœur de la section : voix poétique (Cormorant)
+.liste__text {
+  font-family: $font-title;
+  font-style: italic;
+  font-weight: 600;             // seule graisse chargée
+  font-size: 1.45rem;
+  line-height: 1.4;
+  color: $green-dark;
+  @media (max-width: $breakpoint-mobile) { font-size: 1.3rem; }
+}
+.contact__text { margin-bottom: 0; }
 .liste__cta,
 .contact__cta { display: block; width: fit-content; margin: 0 auto; }
 
@@ -567,7 +789,7 @@ section[id] { scroll-margin-top: $nav-height; }
 .contact__lead--mobile { display: none; }
 
 @media (max-width: $breakpoint-mobile) {
-  .contact__cta { display: block; }
+  .contact__cta { display: block; margin-top: 22px; }
   .contact__lead--desktop { display: none; }
   .contact__lead--mobile { display: inline; }
 }
@@ -581,16 +803,38 @@ section[id] { scroll-margin-top: $nav-height; }
   color: $stone;
   @media (max-width: $breakpoint-mobile) { font-size: .95rem; }
 }
+// L'adresse en Cormorant. En desktop elle est LE contenu de la section : seule sur
+// sa ligne et grande. En mobile elle reste un repli discret, en ligne après le libellé.
 .contact__mail {
-  color: $ink;
-  font-weight: 700;
+  display: block;
+  margin-top: 4px;
+  font-family: $font-title;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1.3;
+  color: $green-dark;
   user-select: all;         // un simple clic sélectionne l'adresse entière
   overflow-wrap: anywhere;  // pas de débordement à 375px
+  @media (max-width: $breakpoint-mobile) {
+    display: inline;
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
 }
 
 // ─── RSVP (#rsvp) ─────────────────────────────────────────────────
-.rsvp { max-width: 640px; margin: 0 auto; }
-.rsvp__form { display: flex; flex-direction: column; gap: 18px; }
+// Le formulaire est un carton-réponse (mixin carton). Même traitement pour
+// l'écran de confirmation, qui le remplace.
+.rsvp { max-width: 720px; margin: 0 auto; }
+.rsvp__form,
+.rsvp__success { @include carton; }
+.rsvp__form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 48px 52px;
+}
 .rsvp__row { display: flex; gap: 16px; }
 .rsvp__row > .rsvp__field { flex: 1; }
 // Rangée des trois compteurs (adultes / enfants / bébés) : « Nombre d'adultes
@@ -616,11 +860,12 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__field select,
 .rsvp__field textarea {
   font-family: $font-body;
-  font-size: 1rem;
+  font-size: 1rem;               // 16px : pas de zoom automatique d'iOS au focus
+  min-height: 46px;              // cible tactile confortable
   padding: 10px 12px;
   background: $bg;
-  border: 1px solid $stone;
-  border-radius: 3px;
+  border: 1px solid $stone;      // contour de champ ≥ 3:1, suffisant pour un composant
+  border-radius: 2px;
   color: $ink;
   &:focus { border-color: $green; }
 }
@@ -630,15 +875,67 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__field select { width: 100%; min-width: 0; }
 .rsvp__fieldset { border: none; }
 .rsvp__radio { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; font-weight: 400; }
-// Radios à libellé long (choix du plat) : une option par ligne, radio calé sur la 1re ligne
+.rsvp__radio input[type="radio"] { accent-color: $green; }
+// Radios à libellé long (choix du plat) : une option par ligne, radio calé sur la
+// 1re ligne de texte (27px de ligne, radio de 18px → 4px de décalage).
 .rsvp__fieldset--stacked .rsvp__radio {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
+  gap: 10px;
   margin-right: 0;
+  padding: 4px 0;
+  cursor: pointer;
+  input { flex-shrink: 0; width: 18px; height: 18px; margin: 4px 0 0; }
 }
 .rsvp__hint { font-size: .85rem; color: $stone; }
 
-// Présentation du menu, au-dessus du choix du plat (encadré crème .card)
+// Choix courts en boutons (Présence, Arrivée, Logement). L'input reste dans le DOM
+// en .sr-only : focusable, lu par les lecteurs d'écran, et ses change déclenchent
+// la logique de main.js. Le span voisin porte l'apparence et les états.
+.rsvp__fieldset--choices legend { margin-bottom: 10px; }
+.rsvp__choices { display: flex; flex-wrap: wrap; gap: 10px; }
+.rsvp__choice {
+  position: relative;            // ancre l'input .sr-only (positionné en absolu) sur son bouton
+  display: flex;
+  flex: 0 1 160px;
+  margin-right: 0;
+}
+.rsvp__choice-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 18px;
+  background: $bg;
+  border: 1px solid $ocre;
+  border-radius: 2px;
+  color: $ink;
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.rsvp__choice:hover .rsvp__choice-label { border-color: $green; }
+// Coché : aplat vert + graisse, la différence ne repose pas sur la seule teinte
+.rsvp__choice input:checked + .rsvp__choice-label {
+  background: $green;
+  border-color: $green;
+  color: $white;
+  font-weight: 600;
+}
+// L'input invisible ne peut pas montrer son focus : l'anneau ocre passe au bouton
+.rsvp__choice input:focus-visible + .rsvp__choice-label {
+  outline: 2px solid $ocre;
+  outline-offset: 2px;
+}
+
+// Présentation du menu : la .card crème se fondrait dans le carton, elle devient
+// un encadré à filet ocre, sans fond.
+.rsvp__menu {
+  background: transparent;
+  border: 1px solid $ocre-line;
+  border-radius: 2px;
+  padding: 18px 20px;
+}
 .rsvp__menu-list {
   display: flex;
   flex-direction: column;
@@ -651,8 +948,9 @@ section[id] { scroll-margin-top: $nav-height; }
     color: $stone;
   }
   dd {
-    font-family: $font-display;
+    font-family: $font-title;
     font-style: italic;
+    font-weight: 600;
     font-size: 1.2rem;
     line-height: 1.4;
     color: $green-dark;
@@ -671,7 +969,7 @@ section[id] { scroll-margin-top: $nav-height; }
 .rsvp__names-title,
 .rsvp__menu-title {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   font-size: .95rem;
   color: $green-dark;
 }
@@ -690,16 +988,35 @@ section[id] { scroll-margin-top: $nav-height; }
 }
 // Plat de l'adulte 2..N : sous sa ligne Prénom / Nom, même écart que les champs empilés
 .rsvp__person-dish { margin-top: 18px; }
-.rsvp__logistics { display: flex; flex-direction: column; gap: 18px; }
+
+// Trois temps lisibles dans le carton — qui répond / logistique / contact — séparés
+// par un filet ocre. Le filet du groupe contact reste seul quand la logistique est
+// masquée (« Non ») : aucun double trait.
+.rsvp__logistics,
+.rsvp__group--contact {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 28px;
+  border-top: 1px solid $ocre-line;
+}
 
 .rsvp__error {
-  background: rgba(200,169,110,.15);
+  background: rgba($ocre, .15);
   border: 1px solid $ocre;
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 12px 14px;
   color: $green-dark;
 }
-.rsvp__submit { align-self: flex-start; font-size: 1rem; cursor: pointer; border: none; }
+.rsvp__submit {
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
+}
 .rsvp__resubmit,
 .rsvp__rgpd { font-size: .85rem; color: $stone; }
 
@@ -711,15 +1028,22 @@ section[id] { scroll-margin-top: $nav-height; }
   overflow: hidden;
 }
 
+// Fond, filets et rayon : partagés avec .rsvp__form (carton-réponse, plus haut)
 .rsvp__success {
   text-align: center;
-  background: $card;
-  border-radius: 5px;
-  padding: 40px 24px;
+  padding: 56px 32px;
 }
-.rsvp__success-text { font-family: $font-display; font-style: italic; font-size: 1.6rem; color: $green-dark; }
+.rsvp__success-text { font-family: $font-title; font-style: italic; font-weight: 600; font-size: 1.6rem; color: $green-dark; }
 
 @media (max-width: $breakpoint-mobile) {
+  // Carton resserré : 18px de section + 18px de carton laissent ~300px aux champs
+  .rsvp__form { padding: 30px 18px; }
+  .rsvp__success { padding: 40px 18px; }
+  .rsvp__form,
+  .rsvp__success { @include carton(5px); }
+  // Les deux choix se partagent la ligne : cibles larges au pouce
+  .rsvp__choice { flex: 1 1 0; }
+  .rsvp__submit { align-self: stretch; text-align: center; }
   .rsvp__row { flex-direction: column; gap: 18px; }
   // Champs empilés : plus rien à aligner. On rend leur largeur pleine (align-items
   // agit sur l'axe horizontal une fois la colonne active) et on libère la hauteur
@@ -737,15 +1061,25 @@ section[id] { scroll-margin-top: $nav-height; }
   background: $bg;
   border-top: 1px solid $ocre;
 }
+// Fleuron ocre au-dessus des prénoms — le champignon des filets de section clôt la page
+.footer::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 10px;
+  background: $fleuron-svg center / contain no-repeat;
+}
 .footer__names {
-  font-family: $font-display;
+  font-family: $font-title;
   font-style: italic;
+  font-weight: 600;
   font-size: 1.5rem;
   color: $green-dark;
 }
 .footer__date {
   font-family: $font-body;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   font-size: .78rem;
