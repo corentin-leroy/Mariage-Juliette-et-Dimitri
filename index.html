@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Lora:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 
   <!-- ?v= : à incrémenter à chaque mise en ligne du CSS/JS, pour que les navigateurs rechargent -->
-  <link rel="stylesheet" href="styles/main.css?v=6">
+  <link rel="stylesheet" href="styles/main.css?v=8">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
         <li><a class="nav__link" href="#venir">Venir au château</a></li>
         <li><a class="nav__link" href="#logement">Logement</a></li>
         <li><a class="nav__link" href="#liste">Liste de mariage</a></li>
-        <li><a class="nav__link" href="#contact">Contact</a></li>
+        <li><a class="nav__link" href="#questions">Questions</a></li>
         <li><a class="nav__link nav__cta btn" href="#rsvp">Confirmer ma présence</a></li>
       </ul>
     </nav>
@@ -238,13 +238,13 @@
 
       <p class="logement__intro">
         Le château et l'hôtel attenant disposent de chambres pour vous accueillir.
-        Indiquez votre besoin dans le formulaire RSVP — nous vous contacterons ensuite
+        Indiquez votre besoin dans le formulaire RSVP, nous vous contacterons ensuite
         personnellement avec le détail de votre chambre et les modalités de paiement.
       </p>
 
       <ul class="logement__infos">
         <li>Linge de lit, linge de toilette et gel douche fournis par le château</li>
-        <li>3 lits parapluies disponibles sur demande — merci de nous contacter directement si vous en avez besoin</li>
+        <li>3 lits parapluies disponibles sur demande, merci de nous contacter directement par mail si vous en avez besoin</li>
         <li>Pas d'ascenseur dans le domaine</li>
         <li>Animaux interdits</li>
         <li>Pas de service de nettoyage pendant le séjour</li>
@@ -270,27 +270,53 @@
       </div>
     </section>
 
-    <!-- ═══════════ CONTACT ═══════════ -->
-    <section id="contact" class="section section--short filet">
+    <!-- ═══════════ QUESTIONS (FAQ) ═══════════ -->
+    <section id="questions" class="section filet">
       <div class="section__head">
         <!-- PLACEHOLDER: aquarelle — cèpe -->
         <img class="section__motif" src="assets/champignon-cepe.png" alt="" aria-hidden="true" width="56" height="56">
-        <p class="eyebrow">Une question ?</p>
-        <h2>Contact</h2>
+        <p class="eyebrow">Vos questions</p>
+        <h2>Questions fréquentes</h2>
         <div class="section__sep" aria-hidden="true"></div>
       </div>
 
-      <!-- Conteneur purement visuel (petit carton à double filet) -->
+      <!-- Dépliants natifs, sans attribut name : plusieurs peuvent être ouverts à la fois.
+           Tous fermés par défaut (pas d'attribut open). -->
+      <div class="faq">
+        <details class="faq__item">
+          <summary class="faq__question">Les enfants sont-ils les bienvenus ?</summary>
+          <div class="faq__answer">
+            <p>Le mariage est un moment familial, vos enfants sont évidemment conviés. Pensez à bien nous préciser leur nombre et leur âge, pour nous permettre de réserver une nounou adaptée au nombre d'enfants. 3 lits parapluies sont disponibles directement au château : pensez à nous dire si vous souhaitez en réserver un.</p>
+          </div>
+        </details>
+
+        <details class="faq__item">
+          <summary class="faq__question">Y a-t-il un dress code ?</summary>
+          <div class="faq__answer">
+            <p>Il n'y a pas de code couleur à respecter en tant que tel, mais une tenue et des souliers adaptés à un mariage, tout du moins pendant la cérémonie. Vos chambres étant au château, si vous souhaitez troquer votre costume pour une tenue plus légère ensuite, vous le pourrez !</p>
+          </div>
+        </details>
+
+        <details class="faq__item">
+          <summary class="faq__question">Y a-t-il un accès pour les personnes à mobilité réduite ?</summary>
+          <div class="faq__answer">
+            <p>Toutes les pièces importantes se situent au rez-de-chaussée, ainsi que certaines chambres. Si vous avez besoin d'une chambre sans escaliers pour raison de santé, signalez-le-nous rapidement afin que nous puissions vous mettre à l'aise.</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Contenu de l'ancienne section Contact, toujours visible sous les questions,
+           dans son propre carton (même style que celui de la liste). -->
       <div class="contact__carton">
         <p class="contact__text">Pour toute question, contactez-nous directement.</p>
 
         <!-- L'adresse email est volontairement absente du HTML (anti-récolte par les bots) :
              elle est reconstruite par morceaux au chargement dans scripts/main.js (initContact),
              qui pose le href mailto du bouton et remplit le bloc adresse ci-dessous.
-             href="#contact" = ancre neutre : sans JS, un clic ne déplace pas la page.
+             Pas de href dans le HTML : sans JS, le bouton reste inerte (aucun déplacement de la page).
              Le bouton mailto est réservé au mobile (masqué au-delà de 640px) : sur ordinateur,
              beaucoup d'invités n'ont aucun client mail configuré et le lien n'aboutirait pas. -->
-        <a class="btn contact__cta is-pending" id="contact-cta" href="#contact" aria-disabled="true">Nous écrire</a>
+        <a class="btn contact__cta is-pending" id="contact-cta" aria-disabled="true">Nous écrire</a>
 
         <p class="contact__fallback" id="contact-fallback" hidden>
           <span class="contact__lead contact__lead--desktop">Écrivez-nous à :</span>

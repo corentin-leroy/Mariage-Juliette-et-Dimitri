@@ -15,8 +15,8 @@ $hero-overlap-mobile: -32px;
 // Fleuron champignon (même dessin que celui des .section__sep), réutilisé dans le footer
 $fleuron-svg: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='#{$ocre-svg}'%3E%3Cpath%20d='M12%204c-4.4%200-8%202.7-8%206%200%20.6.5%201%201.1%201h13.8c.6%200%201.1-.4%201.1-1%200-3.3-3.6-6-8-6z'/%3E%3Cpath%20d='M9.5%2011h5v6.2c0%201-.9%201.8-2%201.8h-1c-1.1%200-2-.8-2-1.8V11z'/%3E%3C/svg%3E");
 
-// Carton de papeterie, commun au RSVP, au logement, à la liste et au
-// contact : feuille crème, filet ocre, second trait en retrait de $inset. Le box-shadow
+// Carton de papeterie, commun au RSVP, au logement, à la liste et aux
+// dépliants de la FAQ : feuille crème, filet ocre, second trait en retrait de $inset. Le box-shadow
 // inset dessine ce second trait (une ligne, pas une ombre portée) ; coins presque droits.
 @mixin carton($inset: 6px) {
   background: $card;
@@ -730,8 +730,8 @@ $prog-axis:     $prog-time-col + $prog-rail-col * .5; // abscisse du trait et de
   }
 }
 
-// ─── LISTE (#liste) & CONTACT (#contact) ──────────────────────────
-// Sections courtes (deux phrases) : padding vertical réduit pour ne pas laisser
+// ─── LISTE (#liste) & contenu « Contact » (dans la FAQ #questions) ──
+// Section courte (deux phrases) : padding vertical réduit pour ne pas laisser
 // une grande bande vide. Déclaré après .section : l'emporte aussi sur sa règle mobile,
 // d'où la valeur mobile réaffirmée ici.
 .section--short {
@@ -740,7 +740,7 @@ $prog-axis:     $prog-time-col + $prog-rail-col * .5; // abscisse du trait et de
   @media (max-width: $breakpoint-mobile) { padding-top: 48px; padding-bottom: 48px; }
 }
 
-// Petit carton à double filet, identique pour la liste et le contact
+// Petit carton à double filet, identique pour la liste et le contact (sous la FAQ)
 .liste__carton,
 .contact__carton {
   max-width: 600px;
@@ -821,6 +821,76 @@ $prog-axis:     $prog-time-col + $prog-rail-col * .5; // abscisse du trait et de
     margin-top: 0;
     font-size: 1.2rem;
   }
+}
+
+// ─── QUESTIONS (#questions) — FAQ en dépliants natifs ─────────────
+// <details>/<summary> natifs : clavier (Tab, Entrée, Espace), état ouvert/fermé et
+// annonce aux lecteurs d'écran gérés par le navigateur, sans JS.
+// Colonne de la même largeur que le carton du RSVP ; un carton par dépliant.
+.faq {
+  max-width: 720px;              // = .rsvp
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                     // espacement régulier entre les dépliants
+}
+.faq__item { @include carton; }
+// Carton du contact, toujours visible sous les questions : un temps de pause plus marqué
+// que l'écart entre deux dépliants, pour qu'il ne se lise pas comme une 4e question.
+.faq + .contact__carton {
+  margin-top: 40px;
+  @media (max-width: $breakpoint-mobile) { margin-top: 32px; }
+}
+// Question : Lora 600 (la réponse est en 400), chevron à droite
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 28px;
+  font-family: $font-body;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: $ink;
+  cursor: pointer;
+  list-style: none;                                // retire le marqueur natif (::marker)
+  &::-webkit-details-marker { display: none; }     // idem pour Safari
+  // Chevron discret ($stone, ≥ 3:1) : deux bordures pivotées, pointe vers le bas
+  &::after {
+    content: '';
+    flex-shrink: 0;
+    width: .5rem;
+    height: .5rem;
+    margin-right: 4px;
+    border-right: 1.5px solid $stone;
+    border-bottom: 1.5px solid $stone;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .2s;
+  }
+  // Focus clavier : contour dans le carton (à l'extérieur, il se confondrait avec le filet ocre)
+  &:focus-visible {
+    outline: 2px solid $green;
+    outline-offset: -3px;
+    border-radius: $carton-radius;
+  }
+}
+// Ouvert : le chevron fait un demi-tour et pointe vers le haut
+.faq__item[open] > .faq__question::after { transform: translateY(2px) rotate(225deg); }
+// La règle globale « * { transition: none } » ne vise pas les pseudo-éléments : on la réaffirme
+@media (prefers-reduced-motion: reduce) {
+  .faq__question::after { transition: none; }
+}
+.faq__answer {
+  padding: 2px 28px 26px;        // espacement confortable sous la question
+  font-family: $font-body;
+  color: $ink;
+  p + p { margin-top: 12px; }
+}
+@media (max-width: $breakpoint-mobile) {
+  .faq__item { @include carton(5px); }
+  .faq__question { padding: 18px 20px; font-size: 1rem; }
+  .faq__answer { padding: 2px 20px 22px; }
 }
 
 // ─── RSVP (#rsvp) ─────────────────────────────────────────────────
