@@ -9,9 +9,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Lora:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <!-- Playfair Display italique, réduite au seul glyphe « & » (text=%26) : l'esperluette des prénoms du hero -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400&text=%26&display=swap" rel="stylesheet">
 
   <!-- ?v= : à incrémenter à chaque mise en ligne du CSS/JS, pour que les navigateurs rechargent -->
-  <link rel="stylesheet" href="styles/main.css?v=8">
+  <link rel="stylesheet" href="styles/main.css?v=9">
 </head>
 <body>
 
@@ -58,7 +60,7 @@
         <span class="hero__monogram" aria-hidden="true"></span>
 
         <p class="hero__eyebrow">Le grand jour approche</p>
-        <h1 class="hero__names">Juliette &amp;&nbsp;Dimitri</h1>
+        <h1 class="hero__names">Juliette <span class="hero__amp">&amp;</span>&nbsp;Dimitri</h1>
         <!-- Date, lieu et région sur trois lignes ; les capitales viennent du CSS (text-transform) -->
         <p class="hero__date">14 &amp; 15 juillet 2027</p>
         <p class="hero__place">Château de Faverges</p>
@@ -145,7 +147,7 @@
       </div>
 
       <address class="venir__address">
-        Château de Faverges — 293 Chemin de la Vie Plaine, 74210 Faverges-Seythenex
+        Château de Faverges - 293 Chemin de la Vie Plaine, 74210 Faverges-Seythenex
       </address>
 
       <ul class="venir__modes">
@@ -174,7 +176,7 @@
               </svg>
             </span>
           </span>
-          <h3 class="venir__mode-title">En train - <strong class="venir__mode-time">3h45</strong> depuis Paris</h3>
+          <h3 class="venir__mode-title">En train jusqu'à Annecy - <strong class="venir__mode-time">3h45</strong> depuis Paris</h3>
           <p class="venir__mode-text">Gare d'Annecy → <strong class="venir__mode-time">45 min</strong> en voiture</p>
         </li>
         <li class="venir__mode">

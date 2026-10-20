@@ -16,6 +16,7 @@ $ocre-line:  rgba($ocre, .5);  // filets secondaires (second trait des cartons, 
 $font-script: 'Pinyon Script', cursive;       // calligraphie : prénoms du hero UNIQUEMENT
 $font-title:  'Cormorant Garamond', serif;    // titres et voix poétique — toujours en italique
 $font-body:   'Lora', serif;                  // texte, menu, boutons, formulaire, libellés (400 à 600)
+$font-ampersand: 'Playfair Display', serif;   // « & » des prénoms du hero UNIQUEMENT (seul glyphe chargé)
 
 // Layout
 $breakpoint-mobile: 640px;

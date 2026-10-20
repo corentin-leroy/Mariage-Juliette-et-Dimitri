@@ -391,6 +391,17 @@ $hero-lines: '.hero__eyebrow, .hero__names, .hero__date, .hero__place, .hero__re
   line-height: 1.2;
   margin-bottom: 12px;
 }
+// Esperluette en Playfair Display italique : celle de Pinyon Script se lit « Et ».
+// Couleur et halo hérités des prénoms (le halo suit ainsi le desktop, le mobile et l'option A).
+// .75em : le haut du « & » s'aligne sur les hampes des « tt », sans peser plus que les déliés
+// de Pinyon ; il reste posé sur la ligne de base (vertical-align: baseline par défaut).
+// Espaces d'origine conservés (espace avant, insécable après) : blancs déjà équilibrés à l'œil.
+.hero__amp {
+  font-family: $font-ampersand;
+  font-style: italic;
+  font-weight: 400;
+  font-size: .75em;
+}
 .hero__date {
   font-family: $font-body;
   font-weight: 600;
