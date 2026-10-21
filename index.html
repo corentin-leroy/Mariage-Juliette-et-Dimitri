@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400&text=%26&display=swap" rel="stylesheet">
 
   <!-- ?v= : à incrémenter à chaque mise en ligne du CSS/JS, pour que les navigateurs rechargent -->
-  <link rel="stylesheet" href="styles/main.css?v=9">
+  <link rel="stylesheet" href="styles/main.css?v=10">
 </head>
 <body>
 
@@ -409,19 +409,20 @@
             </fieldset>
 
             <!-- Choix du plat principal (branche « Oui » seulement, comme tout ce bloc).
-                 Le répondant (adulte 1) choisit ici ; les adultes 2..N choisissent dans leur
-                 bloc de nom (liste déroulante générée par le JS à partir des value ci-dessous,
-                 seule source des deux libellés). Les enfants et bébés n'ont pas de choix. -->
+                 Le répondant (adulte 1) choisit ici ; les adultes 2..N et les enfants choisissent
+                 dans leur bloc de nom (liste déroulante générée par le JS à partir des value
+                 ci-dessous, seule source des deux libellés).
+                 Les bébés n'ont pas de choix. -->
             <div class="rsvp__menu card">
               <p class="rsvp__menu-title">Le menu</p>
               <dl class="rsvp__menu-list">
                 <div>
                   <dt>Plat principal</dt>
-                  <dd>Crevettes pochées, sauce coco-piment, risotto de petit épeautre</dd>
+                  <dd>Création du chef à base de crevettes</dd>
                 </div>
                 <div>
                   <dt>Option végétarienne</dt>
-                  <dd>Aubergine, sauce miso, risotto de petit épeautre</dd>
+                  <dd>Alternative végétarienne</dd>
                 </div>
               </dl>
             </div>
@@ -432,12 +433,19 @@
             <fieldset class="rsvp__field rsvp__fieldset rsvp__fieldset--stacked">
               <legend>Votre plat principal <span class="rsvp__req" aria-hidden="true">*</span></legend>
               <label class="rsvp__radio">
-                <input type="radio" name="plat-repondant" value="Crevettes pochées, risotto de petit épeautre"> Crevettes pochées, risotto de petit épeautre
+                <input type="radio" name="plat-repondant" value="Création du chef à base de crevettes"> Création du chef à base de crevettes
               </label>
               <label class="rsvp__radio">
-                <input type="radio" name="plat-repondant" value="Aubergine, sauce miso, risotto de petit épeautre (végétarien)"> Aubergine, sauce miso, risotto de petit épeautre (végétarien)
+                <input type="radio" name="plat-repondant" value="Alternative végétarienne"> Alternative végétarienne
               </label>
             </fieldset>
+
+            <!-- Régime du répondant, optionnel, sous son plat. Sans name : il part, nettoyé,
+                 en tête du champ caché « Régimes adultes » (même ordre que « Noms adultes »). -->
+            <div class="rsvp__field">
+              <label for="rsvp-respondent-diet">Régime alimentaire / allergies</label>
+              <input type="text" id="rsvp-respondent-diet" data-role="diet" placeholder="Ex. végétarien, allergie aux fruits à coque">
+            </div>
 
             <div class="rsvp__row rsvp__row--counts">
               <div class="rsvp__field">
@@ -463,7 +471,7 @@
             <!-- Blocs « Prénom / Nom » générés par le JS (initRsvp → applyPeople).
                  Leurs inputs n'ont volontairement AUCUN attribut name : ils ne sont pas
                  soumis un par un (sinon le nombre de colonnes de la Sheet varierait),
-                 ils alimentent les deux champs cachés concaténés plus bas. -->
+                 ils alimentent les champs cachés concaténés plus bas. -->
             <div class="rsvp__names" id="rsvp-adult-names" hidden>
               <p class="rsvp__names-title">Les autres adultes</p>
               <p class="rsvp__hint">Vous êtes l'adulte 1, indiquez le nom des autres adultes.</p>
@@ -473,13 +481,6 @@
             <div class="rsvp__names" id="rsvp-child-names" hidden>
               <p class="rsvp__names-title">Les enfants</p>
               <div class="rsvp__people" id="rsvp-child-people"></div>
-            </div>
-
-            <div class="rsvp__field">
-              <!-- Libellé affiché seul modifié : le name reste « Régimes / allergies »
-                   (colonne de la Sheet + script externe, qui cassent si le name change). -->
-              <label for="rsvp-diet">Régime alimentaire / allergies</label>
-              <input type="text" id="rsvp-diet" name="Régimes / allergies">
             </div>
           </div>
 
@@ -497,12 +498,16 @@
             </div>
           </div>
 
-          <!-- Trois colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
-               concaténation des noms saisis dans les blocs ci-dessus, séparés par " ; ".
-               « Plats adultes » suit exactement l'ordre de « Noms adultes » (répondant, puis 2..N). -->
+          <!-- Six colonnes fixes de la Sheet, remplies par le JS juste avant l'envoi :
+               concaténation des saisies des blocs ci-dessus, séparées par " ; ".
+               Plats et régimes suivent exactement l'ordre des noms correspondants
+               (adultes : répondant, puis 2..N ; enfants : 1..M) ; un régime vide garde sa place. -->
           <input type="hidden" name="Noms adultes" id="rsvp-adult-names-value">
           <input type="hidden" name="Noms enfants" id="rsvp-child-names-value">
           <input type="hidden" name="Plats adultes" id="rsvp-adult-dishes-value">
+          <input type="hidden" name="Plats enfants" id="rsvp-child-dishes-value">
+          <input type="hidden" name="Régimes adultes" id="rsvp-adult-diets-value">
+          <input type="hidden" name="Régimes enfants" id="rsvp-child-diets-value">
 
           <p class="rsvp__error" id="rsvp-error" role="alert" hidden></p>
 
@@ -526,6 +531,6 @@
     <p class="footer__date">14-15 juillet 2027</p>
   </footer>
 
-  <script src="scripts/main.js?v=3"></script>
+  <script src="scripts/main.js?v=5"></script>
 </body>
 </html>

@@ -1067,8 +1067,16 @@ $prog-axis:     $prog-time-col + $prog-rail-col * .5; // abscisse du trait et de
   color: $stone;
   margin-bottom: 8px;
 }
-// Plat de l'adulte 2..N : sous sa ligne Prénom / Nom, même écart que les champs empilés
-.rsvp__person-dish { margin-top: 18px; }
+// Plat puis régime (adultes 2..N et enfants) : sous la ligne Prénom / Nom, empilés avec
+// le même écart que les champs empilés (un libellé de plat long serait tronqué en demi-largeur)
+.rsvp__person-dish,
+.rsvp__person-diet { margin-top: 18px; }
+// Un bloc = cinq champs : un filet secondaire marque où commence la personne suivante
+.rsvp__person + .rsvp__person {
+  border-top: 1px solid $ocre-line;
+  padding-top: 18px;
+  margin-top: 4px;
+}
 
 // Trois temps lisibles dans le carton — qui répond / logistique / contact — séparés
 // par un filet ocre. Le filet du groupe contact reste seul quand la logistique est
